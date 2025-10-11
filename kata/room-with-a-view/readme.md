@@ -41,8 +41,9 @@ Additional Context: 'Peak season is quickly approaching, so the system must be r
 - R18: Guest request housekeeping (see A5).
 - R19: Reservation staff re-generate "complete payment" link for a room with an expired payment.
 - R20: System assign housekeeping request to cleaning staff using round-robin.
-- R21: Reservation staff can lock/unlock a room smart lock.
+- ~~R21: Reservation staff can lock/unlock a room smart lock.~~ (see A12).
 - R22: Reservation/cleaning staff login into the system (see A10).
+- R23: Reservation staff see failed lock/unlock room logs.
 
 ### Non Functional
 
@@ -62,15 +63,16 @@ Additional Context: 'Peak season is quickly approaching, so the system must be r
   - Manage room data.
   - Update room status manually (available, ready to clean, etc).
 - A2: The peak seasons can happen once each month and it can reach 1 million guests and 10K concurrent requests.
-- A3: Payment for the guest book will be done in the existing reservation system. New system will provide API to fetch the needed information for the payment activities.
+- A3: Payment for the guest book will created and completed in the existing reservation system.
 - A4: The room smart lock is connected to the new system backend so opening it can be done using the new system web or mobile app. For a guest that book manually (walk-in/phone-call), they will receive a temporary credential to login into the web.
-- ~~A5: When guest request housekeeping, the request will be automatically assigned to the available cleaning/maintenance staff using round-robin approach.~~ (See R20)
+- ~~A5: When guest request housekeeping, the request will be automatically assigned to the available cleaning/maintenance staff using round-robin approach.~~ (see R20)
 - A6: In R5, R10, R11, R17, & R18, the new system will sync room state into the existing reservation system. The existing reservation system will be the source of truth of the room data.
-- A7: In R8 & R22, new system will communicate to smart lock system to lock/unlock the door and sync the state into the existing reservation system.
+- A7: In R8 & R21, new system will communicate to smart lock system to lock/unlock the door and sync the state into the existing reservation system.
 - A8: In R3 & R6, the credential only active based on the guest check in/out period.
 - A9: In R7, the complete payment link will contain a long-unique token that represent the payment resource. Also the link will be expired within 24 hours.
 - A10: Reservation & cleaning staff use SSO to login to the new service. Their user credentials (source of truth) is located in the existing reservation system.
 - A11: The smart lock system is hosted by the reservation company instead of using service provided by external entity.
+- A12: Reservation staff can lock/unlock room using existing reservation system.
 
 ## Architecture Characteristics
 
@@ -89,6 +91,8 @@ None
 
 ## Architecture
 
+### Details
+
 The selected architecture style is **Service Based**. It favor cheap and fast development but also provide room for the system elasticsity. There are 2 services; reservation & booking services.
 
 Booking service a dedicated service to handle user booking requests especially at peak season. Separating it will maximalize the service performance at the peak time.
@@ -97,4 +101,20 @@ Th reservation service will handle the rest of the features. This service will a
 
 Both services will have own DB without shared access to ensure elasticsity & availability especially for the booking service.
 
-Each services will communicate using both sync and async communication based on certain activities. For activities that require immediately result like create payment after booking request is created, it will use sync communication. For activities that need to fan out the communication to multiple services like sync room lock state to smart lock and existing system, it will use async communication.
+Each services will communicate using both sync and async communication based on certain activities. Details:
+
+- Sync communication (HTTP request) will be used for activities that require immediate result such as create payment (walk-in & phone-call booking) & lock/unlock door in smart lock system. Because these activities has low impact when peak season occurs, this communication is okay to use.
+- Async communication (Pub/Sub) will be used to handle high traffic request in peak season such as create payment & update room state when a booking request is created. This communication is more expensive to build & doesn't give immediate result but it allow system to handle massive traffic by queueing the them.
+
+### Implementation Concern
+
+#### Handling Payment Creation
+
+Issue: hmm saat ini pakai async untuk create payment dari new ke old system supaya bisa scaling jumlah user saat peak season. Ini artinya user perlu cek email untuk lihat detail payment alih-alih bisa lihat langsung.
+
+Todo: cari cara supaya user bisa lihat hasil payment langsung saat booking. Mungkin bisa pakai short polling.
+
+#### Booking Idempotency
+
+Issue: saat peak season, banyak user akan melakukan booking kamar yg sama secara bersamaan. 
+Todo: cari cara supaya booking bisa idempotency. Kepikiran pakai optimistic lock tapi jelek UX-nya di sisi user. Hmm pakai optimistic lock tapi di-retry di client alih-alih kirim error? Jadi di UI bakal loading terus sampai suatu limit loading tercapai.
