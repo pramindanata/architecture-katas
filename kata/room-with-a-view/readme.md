@@ -70,6 +70,7 @@ Additional Context: 'Peak season is quickly approaching, so the system must be r
 - A8: In R3 & R6, the credential only active based on the guest check in/out period.
 - A9: In R7, the complete payment link will contain a long-unique token that represent the payment resource. Also the link will be expired within 24 hours.
 - A10: Reservation & cleaning staff use SSO to login to the new service. Their user credentials (source of truth) is located in the existing reservation system.
+- A11: The smart lock system is hosted by the reservation company instead of using service provided by external entity.
 
 ## Architecture Characteristics
 
@@ -88,8 +89,12 @@ None
 
 ## Architecture
 
-The selected architecture style is **Service Based**. It favor cheap and fast development but also provide room for the system elasticsity. There are 2 services; reservation & booking services. Both services will have own DB without shared access to ensure elasticsity & availability especially for the booking service. Each services will communicate using async approach with retry mechanism to avoid failed communication like sync approach.
+The selected architecture style is **Service Based**. It favor cheap and fast development but also provide room for the system elasticsity. There are 2 services; reservation & booking services.
 
 Booking service a dedicated service to handle user booking requests especially at peak season. Separating it will maximalize the service performance at the peak time.
 
 Th reservation service will handle the rest of the features. This service will act like a monolith service. No need for seperate it into multiple services because the need of rapid development and no performance urgency in the other features except the booking feature.
+
+Both services will have own DB without shared access to ensure elasticsity & availability especially for the booking service.
+
+Each services will communicate using both sync and async communication based on certain activities. For activities that require immediately result like create payment after booking request is created, it will use sync communication. For activities that need to fan out the communication to multiple services like sync room lock state to smart lock and existing system, it will use async communication.
