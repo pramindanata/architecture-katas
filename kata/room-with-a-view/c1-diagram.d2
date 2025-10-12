@@ -35,7 +35,7 @@ newReservationSystem: |md
   ## New Reservation System
   [Software System]
 
-  System for handling guest booking with state-of-the-art housekeeping management.
+  System for handling guest reservation with state-of-the-art housekeeping management.
 | {
   shape: rectangle
   style.fill: "#87CEEB"
@@ -68,23 +68,22 @@ ses: |md
   shape: rectangle
 }
 
-guest -> newReservationSystem: login, register, book room, lock/unlock room smart lock, & request housekeeping
+guest -> newReservationSystem: login, register, create reservation, lock/unlock room smart lock, & request housekeeping
 guest -> oldReservationSystem: complete payment
-reservationStaff -> newReservationSystem: manage reservations, housekeeping, re-generate payment links, manage temporary guest credentials, & view lock/unlock room logs.
+reservationStaff -> newReservationSystem: manage guest reservations, manage housekeeping, re-generate payment links, manage temporary guest credentials, & view lock/unlock room logs.
 cleaningStaff -> newReservationSystem: view & update housekeeping tasks
-cleaningStaff -> oldReservationSystem: manage room data
+reservationStaff -> oldReservationSystem: manage room data
 newReservationSystem -> oldReservationSystem: {
-  label: "booking request created\n[Pub/Sub]"
+  label: "reservation created\n[Pub/Sub]"
   style.stroke-dash: 3
 }
-newReservationSystem -> oldReservationSystem: "create & handle payment for walk-in & phone-call booking \n[HTTP]"
 newReservationSystem -> smartLockSystem: "lock/unlock room smart lock\n[HTTPS]"
 smartLockSystem -> newReservationSystem: {
   label: "room lock/unlock state updated\n[Pub/Sub]"
   style.stroke-dash: 3
 }
 oldReservationSystem -> newReservationSystem: {
-  label: "room state updated\n[Pub/Sub]"
+  label: "room state updated, payment created\n[Pub/Sub]"
   style.stroke-dash: 3
 }
 newReservationSystem -> ses: "send email notifications\n[HTTPS]"

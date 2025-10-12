@@ -1,0 +1,28 @@
+guest: Guest
+newSystem: New Reservation System
+newSystem.bookingService: Booking Service
+newSystem.client: Client App
+newSystem.cache: Cache
+newSystem.db: Database
+oldSystem: Old Reservation System
+
+guest -> newSystem.client: 1. Create reservation
+newSystem.client -> newSystem.bookingService: 2. Create reservation
+newSystem.bookingService -> oldSystem: {
+  label: 3. Reservation created
+  style.stroke-dash: 3
+}
+
+oldSystem -> newSystem.bookingService: {
+  label: 5. Payment created
+  style.stroke-dash: 3
+}
+
+newSystem.bookingService -> newSystem.db: 6. Store reservation data
+newSystem.bookingService -> newSystem.cache: 7. Cache reservation data
+
+newSystem.client -> newSystem.bookingService: 4. Short poll to get payment info
+
+newSystem.cache -> newSystem.bookingService : 8. Get payment info
+newSystem.bookingService -> newSystem.client: 9. Return payment info
+newSystem.client -> guest: 10. Show payment info

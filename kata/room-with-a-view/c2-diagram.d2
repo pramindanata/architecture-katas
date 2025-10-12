@@ -1,0 +1,174 @@
+guest: |md
+  ## Guest
+  [person]
+
+  Hotel guest
+| {
+  shape: c4-person
+}
+
+reservationStaff: |md
+  ## Reservation Staff
+  [person]
+
+  Staff member who handles reservations
+| {
+  shape: c4-person
+}
+
+cleaningStaff: |md
+  ## Cleaning Staff
+  [person]
+
+  Staff member who handle housekeeping
+| {
+  shape: c4-person
+}
+
+newSystem: |md
+  ## New Reservation System
+  [Software System]
+
+  System for handling guest reservation with state-of-the-art housekeeping management.
+| {
+  shape: rectangle
+  style.fill: "#87CEEB"
+  label.near: bottom-left
+}
+
+newSystem.web: |md
+  # Reservation Web
+  [Container]
+
+  Provide web page to access new reservation system.
+| {
+    shape: rectangle
+}
+
+newSystem.apiGateway: |md
+  # API Gateway
+  [Container]
+
+  A gateway for client applications to communicate with backend services.
+| {
+    shape: rectangle
+}
+
+newSystem.bookingService: |md
+  # Booking Service
+  [Container]
+
+  Provides APIs for exploring rooms & creating reservations for guests.
+| {
+    shape: rectangle
+}
+
+newSystem.bookingServiceDb: |md
+    # Booking Service DB
+    [Container]
+
+    Store reservation (master), room (copy), & payment (copy) data.
+| {
+    shape: cylinder
+}
+
+newSystem.reservationService: |md
+  # Reservation Service
+  [Container]
+
+  Provides APIs for staff to manage reservations and housekeeping & guest to request housekeeping and smart lock management.
+| {
+    shape: rectangle
+}
+
+newSystem.cache: |md
+    # Cache
+    [Container]
+
+    Store payment cache.
+| {
+    shape: cylinder
+}
+
+newSystem.reservationServiceDb: |md
+    # Reservation Service DB
+    [Container]
+
+    Store reservation (copy), room (copy), payment (copy), housekeeping (master), & smart lock (copy) data.
+| {
+    shape: cylinder
+}
+
+newSystem.pubsub: |md
+    # Pub/Sub
+    [Container]
+
+    Pub/Sub system to handle async communication between services.
+| {
+    shape: queue
+}
+
+newSystem.queue: |md
+    # Queue
+    [Container]
+
+    Queue system to handle housekeeping task assignment based on its prioritization.
+| {
+    shape: queue
+}
+
+oldSystem: |md
+  ## Old Reservation System
+  [Software System]
+
+  Legacy system for handling room management, payment, etc.
+| {
+  shape: rectangle
+}
+
+smartLockSystem: |md
+  ## Smart Lock System
+  [Software System]
+
+  System for managing smart locks on guest room doors.
+| {
+  shape: rectangle
+}
+
+ses: |md
+  ## Amazon SES
+  [Software System]
+
+  Service to send email notifications.
+| {
+  shape: rectangle
+}
+
+guest -> newSystem.web: create reservation
+reservationStaff -> newSystem.web: manage guest reservations & manage housekeeping.
+cleaningStaff -> newSystem.web: handle housekeeping tasks
+newSystem.web -> newSystem.apiGateway: "[HTTPS]"
+newSystem.apiGateway -> newSystem.bookingService: "[HTTPS]"
+newSystem.apiGateway -> newSystem.reservationService: "[HTTPS]"
+newSystem.bookingService -> ses: "send email notifications\n[HTTPS]"
+newSystem.bookingService -> newSystem.bookingServiceDb: "[DB Protocol]"
+newSystem.reservationService -> newSystem.cache: "[Cache Protocol]"
+newSystem.reservationService <-> newSystem.pubsub: {
+  label: "[PubSub Protocol]"
+  style.stroke-dash: 3
+}
+newSystem.reservationService -> newSystem.reservationServiceDb: "[DB Protocol]"
+newSystem.bookingService -> newSystem.cache: "[Cache Protocol]"
+newSystem.reservationService -> newSystem.queue: {
+  label: "[Queue Protocol]"
+  style.stroke-dash: 3
+}
+newSystem.bookingService <-> newSystem.pubsub: {
+  label: "[PubSub Protocol]"
+  style.stroke-dash: 3
+}
+newSystem.reservationService -> smartLockSystem: "[HTTPS]"
+newSystem.pubsub <-> oldSystem: {
+  label: "[PubSub Protocol]"
+  style.stroke-dash: 3
+}
