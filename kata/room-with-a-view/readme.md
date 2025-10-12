@@ -117,6 +117,8 @@ Each services will communicate using both sync and async communication based on 
 
 #### C4 (Container)
 
+![diagram](./c2-diagram.svg)
+
 ## Implementation Concern
 
 ### Payment Creation in Peak Season
@@ -161,4 +163,3 @@ When a guest request a housekeeping service, system need to prioritize rooms bas
 When certain events are triggered (guest checked-out, housekeeping requested, etc), the event handler will create a `housekeeping task`object. This object contains a prioritization score that were calculated from the room type. When the task is created, system will dispatch a job to queue to assign the cleaning staff to that task.
 
 The queue must have concurrency of 1 (it means only 1 job can be processed at the same time) to avoid system accidentally assign same staff to different rooms at the same time when there are multiple dispached "task created" jobs.
-
