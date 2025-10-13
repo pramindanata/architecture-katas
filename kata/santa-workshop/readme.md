@@ -12,12 +12,95 @@ While riding his sleigh, Santa needs locations of each home, what presents to de
 
 ### Assumptions
 
+- A1: A present request details consist of what toys the children want, his/her location, and his/her details.
+- A2: A present can contain multiple toys.
+
 ### Actors
+
+- Santa: deliver presents to children.
+- Elves: view present order reports & produce presents.
+- Children: send present requests in form of mail, email, or a phone call.
 
 ### Functional Requirements
 
+- R1: System can retrieve present request email texts from an email server.
+- R2: System can retrieve present request mail images from a physical scanner machine.
+- R3: System can extract the mail text from present request mail images.
+- R4: System can decipher present request texts to get their details in a structured way (see A1 for the details specification).
+- R5: Elves can view the report of toys that need to be produced.
+- R6: Elves can update the present request production status after the toys production is done so it can be delivered.
+- R7: Santa can view the delivery routes. Each delivery route dedicated for a single present location. It also contain information about the hazard that need to be aware of.
+- R8: Santa can update the present request delivery status after the present is delivered.
+- R9: System can retrieve present request audio texts from a Voice Gateway service.
+- R10: System can generate report of what toys need to be produced and their count from the available present requests.
+- R11: Santa can view the GPS navigation of the current active delivery route. It will be changed to the next route after the previous delivery is done.
+- R12: System can mark a present request details to be reviewed manually when confident score is low (below 90%).
+- R13: Santa can manual review present request details with low confident score.
+- R14: Santa can view list of present that ready to be delivered.
+
 ### Non-Functional Requirements
+
+- NFR1: System should capable of dechipering the requested present texts accurately.
+- NFR2: System should capable of dechipering the requested present texts in large number for shorter time (1.000 texts per minute).
+- NFR3: System should ensure GPS accuracy when delivering the present.
+- NFR4: System should maximize the overall delivery speed from the available delivery routes.
+- NFR5: Dechipering text & delivery navigation features should have 99.9% availability during the Christmas Eve period.
+- NFR6: System should capable of dechipering millions of requested present during Christmas Eve period.
+- NFR7: Children data must be handled securely
 
 ### Driven Architecture Characteristics
 
+- (TOP) Accuracy: NFR1, NFR3, & NFR4
+- Performance: NFR2
+- (TOP) Availability: NFR5
+- (TOP) Elasticsity: NFR6
+- Security: NFR7
+
+## Implementation Concern
+
+### Overview of Retrieving Present Request Text
+
+> TODO
+
+Gambar diagram supaya kebayang gimana peroleh request dari berbagai sumber (voice, mail, & email). Detailnya akan dijelaskan di section lain.
+
+### Receiving Request from Phone Calls
+
+> TODO
+
+Use Voice Gateway to record phone call and send the text into our system. Example: Twillio Programmable Voice.
+
+### Receiving Request from Mails
+
+> TODO
+
+Use OCR. Need to explore:
+
+- Should we use existing model or train our own model to make system capable decipher bad handwriting from the images?
+
+### Receiving Request from Emails
+
+> TODO
+
+- Tarik dari email server.
+
+### Retrieving Present Details from Mail, Email, & Phone Call Texts
+
+> TODO
+
+Use AI. Hmm GPT should be enough.
+
+### Routing Algorithm
+
+> TODO
+
+Santa deliver the present by flying. Need fast & accurate algorithm to generate the delivery routes.
+
+### Viewing Delivery GPS Navigation
+
+> TODO
+
+Pakai short poll?
+
 ## Architecture
+
