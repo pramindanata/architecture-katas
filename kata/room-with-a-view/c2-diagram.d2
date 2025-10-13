@@ -144,31 +144,35 @@ ses: |md
   shape: rectangle
 }
 
-guest -> newSystem.web: create reservation
-reservationStaff -> newSystem.web: manage guest reservations & manage housekeeping.
-cleaningStaff -> newSystem.web: handle housekeeping tasks
+guest -> newSystem.web: Create reservation
+reservationStaff -> newSystem.web: Manage guest reservations & housekeeping
+cleaningStaff -> newSystem.web: Handle Housekeeping tasks
 newSystem.web -> newSystem.apiGateway: "[HTTPS]"
 newSystem.apiGateway -> newSystem.bookingService: "[HTTPS]"
 newSystem.apiGateway -> newSystem.reservationService: "[HTTPS]"
 newSystem.bookingService -> ses: "send email notifications\n[HTTPS]"
-newSystem.bookingService -> newSystem.bookingServiceDb: "[DB Protocol]"
-newSystem.reservationService -> newSystem.cache: "[Cache Protocol]"
-newSystem.reservationService <-> newSystem.pubsub: {
-  label: "[PubSub Protocol]"
+newSystem.bookingService -> newSystem.bookingServiceDb: "Read & write data from/to\n[DB Protocol]"
+newSystem.reservationService -> newSystem.cache: "Read & write data from/to\n[Cache Protocol]"
+newSystem.reservationService -> newSystem.pubsub: {
+  label: "Subscribe topics from\n[PubSub Protocol]"
   style.stroke-dash: 3
 }
-newSystem.reservationService -> newSystem.reservationServiceDb: "[DB Protocol]"
-newSystem.bookingService -> newSystem.cache: "[Cache Protocol]"
+newSystem.reservationService -> newSystem.reservationServiceDb: "Read & write data from/to\n[DB Protocol]"
+newSystem.bookingService -> newSystem.cache: "Read & write data from/to\n[Cache Protocol]"
 newSystem.reservationService -> newSystem.queue: {
-  label: "[Queue Protocol]"
+  label: "Dispatch & listen jobs to/from\n[Queue Protocol]"
   style.stroke-dash: 3
 }
-newSystem.bookingService <-> newSystem.pubsub: {
-  label: "[PubSub Protocol]"
+newSystem.bookingService -> newSystem.pubsub: {
+  label: "Publish & subscribe topics to/from\n[PubSub Protocol]"
   style.stroke-dash: 3
 }
-newSystem.reservationService -> smartLockSystem: "[HTTPS]"
-newSystem.pubsub <-> oldSystem: {
-  label: "[PubSub Protocol]"
+newSystem.reservationService -> smartLockSystem: "Lock/unlock smart lock\n[HTTPS]"
+smartLockSystem -> newSystem.pubsub: {
+  label: "Publish topics to\n[PubSub Protocol]"
+  style.stroke-dash: 3
+}
+oldSystem -> newSystem.pubsub: {
+  label: "Publish & subscribe topics to/from\n[PubSub Protocol]"
   style.stroke-dash: 3
 }

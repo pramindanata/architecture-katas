@@ -62,20 +62,16 @@ ses: |md
   shape: rectangle
 }
 
-guest -> newReservationSystem: login, register, create reservation, lock/unlock room smart lock, & request housekeeping
-reservationStaff -> newReservationSystem: manage guest reservations, manage housekeeping, re-generate payment links, manage temporary guest credentials, & view lock/unlock room logs.
-cleaningStaff -> newReservationSystem: view & update housekeeping tasks
-newReservationSystem -> oldReservationSystem: {
-  label: "reservation created\n[Pub/Sub]"
-  style.stroke-dash: 3
-}
-newReservationSystem -> smartLockSystem: "lock/unlock room smart lock\n[HTTPS]"
+guest -> newReservationSystem: Create reservation
+reservationStaff -> newReservationSystem: Manage guest reservations & housekeeping
+cleaningStaff -> newReservationSystem: Handle Housekeeping tasks
+newReservationSystem -> smartLockSystem: "Lock/unlock room smart lock\n[HTTPS]"
 smartLockSystem -> newReservationSystem: {
-  label: "room lock/unlock state updated\n[Pub/Sub]"
+  label: "Publish topics to\n[Pub/Sub Protocol]"
   style.stroke-dash: 3
 }
 oldReservationSystem -> newReservationSystem: {
-  label: "room state updated, payment created\n[Pub/Sub]"
+  label: "Publish & subscribe topics to/from\n[PubSub Protocol]"
   style.stroke-dash: 3
 }
-newReservationSystem -> ses: "send email notifications\n[HTTPS]"
+newReservationSystem -> ses: "Send email notifications\n[HTTPS]"
