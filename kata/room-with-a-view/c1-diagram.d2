@@ -1,9 +1,3 @@
-vars: {
-  d2-config: {
-    layout-engine: elk
-  }
-}
-
 guest: |md
   ## Guest
   [person]
@@ -69,10 +63,8 @@ ses: |md
 }
 
 guest -> newReservationSystem: login, register, create reservation, lock/unlock room smart lock, & request housekeeping
-guest -> oldReservationSystem: complete payment
 reservationStaff -> newReservationSystem: manage guest reservations, manage housekeeping, re-generate payment links, manage temporary guest credentials, & view lock/unlock room logs.
 cleaningStaff -> newReservationSystem: view & update housekeeping tasks
-reservationStaff -> oldReservationSystem: manage room data
 newReservationSystem -> oldReservationSystem: {
   label: "reservation created\n[Pub/Sub]"
   style.stroke-dash: 3
@@ -87,4 +79,3 @@ oldReservationSystem -> newReservationSystem: {
   style.stroke-dash: 3
 }
 newReservationSystem -> ses: "send email notifications\n[HTTPS]"
-ses -> guest: email notifications
