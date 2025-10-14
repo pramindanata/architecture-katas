@@ -1,0 +1,55 @@
+elves: {
+  label: Elves
+  shape: c4-person
+}
+
+scanner: {
+  label: Scanner
+}
+
+web {
+  label: Web Application
+}
+
+uploadService: {
+  label: Upload Service
+}
+
+storage: {
+  label: Cloud Storage
+  shape: cylinder
+}
+
+mailRequestParserService: {
+  label: Mail Request Parser Service
+}
+
+ocr: {
+  label: OCR AI Model
+  shape: hexagon
+}
+
+parser: {
+  label: Parser AI Model
+  shape: hexagon
+}
+
+otherService: {
+  label: Other Services
+}
+
+elves -> scanner: "1. Scan the mail"
+elves -> web: "2. Upload the scanned file"
+web -> uploadService: "3. Upload scanned file\n[HTTPS]"
+uploadService -> storage: "4. Store scanned file\n[HTTPS]"
+uploadService -> mailRequestParserService: {
+  label: "5. Notify new file uploaded\n[Kafka]"
+  style.stroke-dash: 3
+}
+mailRequestParserService -> storage: "6. Fetch scanned file\n[HTTPS]"
+mailRequestParserService -> ocr: "7. Extract text from scanned file\n[HTTPS]"
+mailRequestParserService -> parser: "8. Parse extracted text into structured format\n[HTTPS]"
+mailRequestParserService -> otherService: {
+  label: "9. Send structured information\n[Kafka]"
+  style.stroke-dash: 3
+}

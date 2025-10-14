@@ -26,7 +26,7 @@ While riding his sleigh, Santa needs locations of each home, what presents to de
 ### Functional Requirements
 
 - R1: System can retrieve present request email texts from an email server.
-- R2: System can retrieve present request mail images from a physical scanner machine.
+~~- R2: System can retrieve present request mail images from a physical scanner machine.~~ (See [ADR4](./adr/04-handle-present-request-from-mail.md))
 - R3: System can extract the mail text from present request mail images.
 - R4: System can analyze present request texts (from mail, email, & vocie call) to extract the structured details (see A1 for the details specification).
 - R5: Elves can view the report of toys that need to be produced.
@@ -41,6 +41,7 @@ While riding his sleigh, Santa needs locations of each home, what presents to de
 - R14: Santa can view list of present that ready to be delivered.
 - R15: Santa can start generating delivery routes for presents that ready to be delivered.
 - R16: System can consolidate duplicate present requests from a same child into 1.
+- R17: Elves can upload scanned mail in bulk.
 
 ### Non-Functional Requirements
 

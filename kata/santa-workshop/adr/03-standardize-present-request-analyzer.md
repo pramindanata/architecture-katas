@@ -4,7 +4,7 @@ Date: 2025-10-14
 
 ## Status
 
-What is the status, such as proposed, accepted, rejected, deprecated, superseded, etc.?
+Accepted
 
 ## Context
 
@@ -33,9 +33,9 @@ Each channel (mail, email, and voice call) will have its own dedicated parser se
 
 The details of each parser will be explained in other ADRs.
 
-The analysis result will be used by other services in the system so Elves can start produce toys and Santa can view the delivery details.
+The analysis result will be used by other services in the system so Elves can start produce toys and Santa can view the delivery details or review present requests manually (if the analysis process resulting a low confident level).
 
-To scale better in high load, the received data from the channel will be published into Kafka and process it later instead of processing it immediately..
+To scale better in high load, the received data from the channel will be published into Kafka and process it later instead of processing it immediately.
 
 ## Consequences
 
