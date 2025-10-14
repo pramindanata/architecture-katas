@@ -12,7 +12,7 @@ While riding his sleigh, Santa needs locations of each home, what presents to de
 
 ### Assumptions
 
-- A1: A present request details consist of what toys the children want, his/her location, and his/her details.
+- A1: A present request details consist of what toys the children want, his/her location, and his/her details. Each child must put this information into the mail, email, or voice call.
 - A2: A present can contain multiple toys.
 - A3: Duplicate requests may occurs from a same child. System will automatically consolidate them into 1 present.
 - A4: In Christmas season period (2 weeks or 1.209.600 seconds), the present requests estimated to peak at 100K request per second.
