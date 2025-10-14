@@ -57,7 +57,7 @@ While riding his sleigh, Santa needs locations of each home, what presents to de
 - (TOP) Accuracy: NFR1, NFR3, & NFR4
 - Performance: NFR2
 - (TOP) Availability: NFR5 & NFR6
-- (TOP) Elasticsity: NFR6
+- (TOP) Elasticity: NFR6
 - Security: NFR7 & NFR8
 
 ## Implementation Concern
