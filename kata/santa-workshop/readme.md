@@ -15,6 +15,7 @@ While riding his sleigh, Santa needs locations of each home, what presents to de
 - A1: A present request details consist of what toys the children want, his/her location, and his/her details.
 - A2: A present can contain multiple toys.
 - A3: Duplicate requests may occurs from a same child. System will automatically consolidate them into 1 present.
+- A4: In Christmas season period (2 weeks or 1.209.600 seconds), the present requests estimated to peak at 100K request per second.
 
 ### Actors
 
@@ -48,7 +49,7 @@ While riding his sleigh, Santa needs locations of each home, what presents to de
 - NFR3: System should ensure GPS accuracy when delivering the present.
 - NFR4: System should maximize the overall delivery speed from the available delivery routes.
 - NFR5: Analyzing text & delivery navigation features should have 99.9% availability during the Christmas Eve period.
-- NFR6: System should capable of analyze millions of requested present during Christmas Eve period without performance degradation.
+- NFR6: System should capable of analyze tens-to-hundreds thousand of requested present during Christmas Eve period without performance degradation.
 - NFR7: Children data must be handled securely
 - NFR8: Communication between external services to retrieve the requested present information must be handled securely.
 
