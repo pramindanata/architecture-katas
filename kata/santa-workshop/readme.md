@@ -14,6 +14,7 @@ While riding his sleigh, Santa needs locations of each home, what presents to de
 
 - A1: A present request details consist of what toys the children want, his/her location, and his/her details.
 - A2: A present can contain multiple toys.
+- A3: Duplicate requests may occurs from a same child. System will automatically consolidate them into 1 present.
 
 ### Actors
 
@@ -26,35 +27,38 @@ While riding his sleigh, Santa needs locations of each home, what presents to de
 - R1: System can retrieve present request email texts from an email server.
 - R2: System can retrieve present request mail images from a physical scanner machine.
 - R3: System can extract the mail text from present request mail images.
-- R4: System can decipher present request texts to get their details in a structured way (see A1 for the details specification).
+- R4: System can analyze present request texts (from mail, email, & vocie call) to extract the structured details (see A1 for the details specification).
 - R5: Elves can view the report of toys that need to be produced.
 - R6: Elves can update the present request production status after the toys production is done so it can be delivered.
 - R7: Santa can view the delivery routes. Each delivery route dedicated for a single present location. It also contain information about the hazard that need to be aware of.
 - R8: Santa can update the present request delivery status after the present is delivered.
-- R9: System can retrieve present request audio texts from a Voice Gateway service.
+- R9: System can retrieve recorder present request audio (or transcript) from a Voice Gateway service.
 - R10: System can generate report of what toys need to be produced and their count from the available present requests.
-- R11: Santa can view the GPS navigation of the current active delivery route. It will be changed to the next route after the previous delivery is done.
+- R11: Santa can view the GPS navigation of the current active delivery route in real time. It will be changed to the next route after the previous delivery is done.
 - R12: System can mark a present request details to be reviewed manually when confident score is low (below 90%).
 - R13: Santa can manual review present request details with low confident score.
 - R14: Santa can view list of present that ready to be delivered.
+- R15: Santa can start generating delivery routes for presents that ready to be delivered.
+- R16: System can consolidate duplicate present requests from a same child into 1.
 
 ### Non-Functional Requirements
 
-- NFR1: System should capable of dechipering the requested present texts accurately.
-- NFR2: System should capable of dechipering the requested present texts in large number for shorter time (1.000 texts per minute).
+- NFR1: System should capable of analyze the requested present texts accurately.
+- NFR2: System should capable of analyze the requested present texts in large number for shorter time (1.000 texts per minute).
 - NFR3: System should ensure GPS accuracy when delivering the present.
 - NFR4: System should maximize the overall delivery speed from the available delivery routes.
-- NFR5: Dechipering text & delivery navigation features should have 99.9% availability during the Christmas Eve period.
-- NFR6: System should capable of dechipering millions of requested present during Christmas Eve period.
+- NFR5: Analyzing text & delivery navigation features should have 99.9% availability during the Christmas Eve period.
+- NFR6: System should capable of analyze millions of requested present during Christmas Eve period without performance degradation.
 - NFR7: Children data must be handled securely
+- NFR8: Communication between external services to retrieve the requested present information must be handled securely.
 
 ### Driven Architecture Characteristics
 
 - (TOP) Accuracy: NFR1, NFR3, & NFR4
 - Performance: NFR2
-- (TOP) Availability: NFR5
+- (TOP) Availability: NFR5 & NFR6
 - (TOP) Elasticsity: NFR6
-- Security: NFR7
+- Security: NFR7 & NFR8
 
 ## Implementation Concern
 
