@@ -16,6 +16,7 @@ While riding his sleigh, Santa needs locations of each home, what presents to de
 - A2: A present can contain multiple toys.
 - A3: Duplicate requests may occurs from a same child. System will automatically consolidate them into 1 present.
 - A4: In Christmas season period (2 weeks or 1.209.600 seconds), the present requests estimated to peak at 100K request per second.
+- A5: Relate to A1, child must state the complete address details (country, city, postcode, etc).
 
 ### Actors
 

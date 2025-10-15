@@ -23,7 +23,7 @@ Reasoning:
 
 Here are samples of the estimated cost if an automation is implemented (assuming there are 100.000 calls and each duration is 5 minutes).
 
-- Using Amazon Transcribe to only transcribe the audio call
+- Using Amazon Transcribe to only transcribe the audio call. It doens't include cost to setup the infrastructure so the call can connect to the transcribe API.
   - Transcribe pricing = $0.024 per minute.
   - **Total cost = $9.750**
 - Using Twillio Voice API to receive the call, record call, store audio, & transcribe audio (record, store, & transcribe are inseparable).
