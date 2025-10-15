@@ -1,4 +1,4 @@
-# ADR01 - Chose Architecture Style
+# ADR01 - Choose Architecture Style
 
 Date: 2025-10-14
 

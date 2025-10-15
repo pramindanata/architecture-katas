@@ -64,3 +64,16 @@ While riding his sleigh, Santa needs locations of each home, what presents to de
 - Security: NFR7 & NFR8
 
 ## Architecture
+
+### Architecture Decision Record
+
+1. [ADR1 - Choose Architecture Style](./adr/01-choose-architecture-style.md)
+2. [ADR2 - Choose Inter-Service Communication](./adr/02-choose-inter-service-communication-style.md)
+3. [ADR3 - Standardize Present Request Analyzer](./adr/03-standardize-present-request-analyzer.md)
+4. [ADR4 - Handle Present Request from Mail](./adr/04-handle-present-request-from-mail.md)
+5. [ADR5 - Handle Present Request from Email](./adr/05-handle-present-request-from-email.md)
+6. [ADR6 - Handle Present Request from Phone Voice Call](./adr/06-handle-present-request-from-phone-voice-call.md)
+7. [ADR7 - Retrieve Coordinate from an Address](./adr/07-retrieve-coordinate-from-an-address.md)
+8. [ADR8 - Offload Delivery Routes](./adr/08-offload-delivery-routes.md)
+
+### Diagram

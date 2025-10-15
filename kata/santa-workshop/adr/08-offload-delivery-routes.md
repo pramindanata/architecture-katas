@@ -1,4 +1,4 @@
-# ADR00 - Generate Delivery Routes
+# ADR00 - Offload Delivery Routes
 
 Date: 2025-10-15
 
