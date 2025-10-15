@@ -1,8 +1,0 @@
-- selected architecture
-- service communication method
-- standardize present request decipher process
-- retrieving present requests from email
-- retrieving present requests from mail
-- retrieving present requests from phone call
-- getting location coordinate from a text
-- offloading delivery route optimization process
