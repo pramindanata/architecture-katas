@@ -1,0 +1,44 @@
+child: {
+  label: Child
+  shape: c4-person
+}
+
+ses: {
+  label: Amazon SES
+}
+
+sns: {
+  label: Amazon SNS
+}
+
+s3: {
+  label: Amazon S3
+  shape: cylinder
+}
+
+parserServire: {
+  label: Email Parser Service
+}
+
+parserAi: {
+  label: Parser AI Model
+  shape: hexagon
+}
+
+otherService: {
+  label: Other Services
+}
+
+child -> ses: "Send present request email"
+ses -> sns: "Notify new email received"
+ses -> s3: "Store raw email MIME"
+sns -> parserServire: {
+  label: "Notify new email received\n[HTTPS]"
+  style.stroke-dash: 3
+}
+parserServire -> s3: "Fetch raw email MIME\n[HTTPS]"
+parserServire -> parserAi: "Parse email content into structured format\n[HTTPS]"
+parserServire -> otherService: {
+  label: "Send structured information\n[Kafka]"
+  style.stroke-dash: 3
+}
