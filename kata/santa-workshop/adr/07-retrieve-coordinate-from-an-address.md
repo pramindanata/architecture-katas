@@ -14,11 +14,13 @@ The given mails, emails, & voice calls only include the address information in a
 
 We choose **Google Maps API** to handle the geocoding process (retrieving coordinate from an address). It covers more complete addresses than other alternatives so it ensure the accuracy of the address location and reduce number of addresses not found. Unfortunately, it has some major issues:
 
-- Higher price ($5 per 1.000 calls)
+- Higher cost ($5 per 1.000 calls)
 - Lower rate limit (50 RPS per GCP project)
 - Restriction about caching the query result, for example, geocoding result can be cached only for 30 days.
 
 To handle the rate limit issue, we can try to contact Google Maps sales to establish an enterprise contract or use multiple projects. With this low RPS, our system need to fetch the addreses coordinate as many as it can while waiting until toys production is complete.
+
+A **distributed cache** will be added to to reduce the API calls in case some present came from same addresses. The benefit of this cache maybe low because majority of present requests are unique.
 
 Other alternatives:
 
@@ -29,9 +31,13 @@ Other alternatives:
 
 ### Positive
 
-- Google Maps API offer more complete addresses.
+- Google Maps API has more address dataset so it maximizes the accuracy of address location & reduce not found address.
 
 ### Negative
+
+- Higher cost to call the API.
+- Low RPS to fetch the address coordinate.
+- Some restriction in storing the API result.
 
 ## Reference
 

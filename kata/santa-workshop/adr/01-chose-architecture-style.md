@@ -30,6 +30,12 @@ We can also reduce the cost of development because monolith architecture natural
 
 The microservice architecture can also be considered. This architecture can maximize the performance, scalability, and elactiscity but not all features requrires all of those characteristics.
 
+For this ADR, only the following containers are planned for the architecture. It may changed based on the new ADRs.
+
+- Main Web: a web application used by Santa & Elves for all requirements that have been gathered.
+- Main Service: a monolith backend service that will handle all functionality.
+- Main Service DB: a relational DB that store data used by the Main Service.
+
 ## Consequences
 
 ### Positive
