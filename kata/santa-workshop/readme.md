@@ -77,3 +77,8 @@ While riding his sleigh, Santa needs locations of each home, what presents to de
 8. [ADR8 - Offload Delivery Routes](./adr/08-offload-delivery-routes.md)
 
 ### Diagram
+
+## Other Reads
+
+- [Generate Delivery Routes](./trd/generating-delivery-routes.md)
+- [Handwritten Letter OCR at Scale](./trd/handwritten-letter-ocr-at-scale.md)
