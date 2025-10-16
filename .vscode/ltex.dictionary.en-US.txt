@@ -1,0 +1,11 @@
+TrOCR
+ADRs
+idempotency
+AutoMQ
+On-prem
+LLM
+CloudMailin
+MailerSend
+Twillio
+Traefik
+polyline

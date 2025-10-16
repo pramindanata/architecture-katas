@@ -8,33 +8,33 @@ Accepted
 
 ## Context
 
-Based on [ADR03](./03-standardize-present-request-analyzer.md), handling present requests require the system to retrieve the mail from a certain channel and analyze it using a dedicated parser service. We need an architecture that capable of handling both processes and it support the following criteria.
+Based on [ADR03](./03-standardize-present-request-analyzer.md), handling present requests require the system to retrieve the mail from a certain channel and analyze it using a dedicated parser service. We need an architecture that capable of handling both processes and support the following criteria.
 
 For retrieving the mail.
 
-- Elves can upload the the scanned files into the system.
+- Elves can upload the scanned files into the system.
 - The service that responsible for uploading the scanned files should capable of handling peak traffic without performance degradation.
 
 For the service.
 
-- It capable of retrieveing a text from an image containg a terrible handwritten mail.
-- It capable of analyzing the retrieved text into structured format.
+- It should retrieve a text from a terrible handwritten mail image.
+- It should analyze the retrieved text into structured format.
 
 ## Decision
 
 ### Retrieving the Scanned Files
 
-The uploading process will be handled by a **dedicated upload service** because it need to scale better. The upload service will upload the file into a certain cloud storage. After a file is uploaded, this service will inform the **mail request parser service** about this new uploaded file via async communication.
+The uploading process will be handled by a **dedicated upload service** because it needs to scale better. The upload service will upload the file into a certain cloud storage. After a file is uploaded, this service will inform the **mail request parser service** about this new uploaded file via asynchronous communication.
 
 Scanning the files need to be handled manually by the Elves. The elves can use the provided upload UI in the system to upload the files from the local storage.
 
-There is another alternative, by make the scanner machines to upload the file automatically to the cloud storage via upload service. Unfortunately, this approach requires extensive operational because it need to change the target URL frequently from the scanner machines. The URL must be signed so no external entity can't upload files without proper authentication.
+There is another alternative, by make the scanner machines to upload the file automatically to the cloud storage via upload service. Unfortunately, this approach requires extensive operational because it needs to change the target URL frequently from the scanner machines. The URL must be signed, so no external entity can't upload files without proper authentication.
 
 ### Analyzing the Mail Image
 
-Retrieveing text from the scanned file and analyzing the text requires AI solutions. We choose to develop our in-house AI models using existing models and fine-tune them to meet our needs. For retrieving the text from scanned file, we choose **TrOCR** model, while analyzing the text we choose **Llama 3.1 8B**.
+Retrieving text from the scanned file and analyzing the text requires AI solutions. We choose to develop our in-house AI models using existing models and fine-tune them to meet our needs. For retrieving the text from scanned file, we choose **TrOCR** model, while analyzing the text we choose **Llama 3.1 8B**.
 
-Developing in-house solutions may requires huge investement upfront (including hiring ML engineers) but it is cheaper than using available Generative AI API. Based on our research, here are the cost estimation for both in-house solutions & using Generative AI API.
+Developing in-house solutions may require huge investment upfront (including hiring ML engineers) but it is cheaper than using available Generative AI API. Based on our research, here are the cost estimation for both in-house solutions & using Generative AI API.
 
 | Approach | Infrastructure Cost | Team Cost | Total Year 1 | Total Year 2+ | Notes |
 |----------|-------------------|-----------|--------------|---------------|-------|

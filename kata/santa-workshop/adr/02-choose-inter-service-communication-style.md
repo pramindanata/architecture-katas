@@ -8,29 +8,29 @@ Accepted
 
 ## Context
 
-Selected architecture style introduce inter-service communication to the system. The communications can be sync or async depending on the scenarios. Standardizing both communication style and technology are essential to ensure the system meets the its driven architecture characteristic especially: elasticity, availability, & performance.
+Selected architecture style introduce inter-service communication to the system. The communications can be synchronous or asynchronous depending on the scenarios. Standardizing both communication style and technology are essential to ensure the system meets its driven architecture characteristic especially: elasticity, availability, & performance.
 
 ## Decision
 
-We choose to use both **sync & async communication** for this system because both of them can accomodate certain scenarios that exist in the system.
+We choose to use both **synchronous & asynchronous communication** for this system because both of them can accommodate certain scenarios that exist in the system.
 
-- Sync communication is used for a communication where immediate response is required.
-- Async communication is used for a communication that decoupled from the caller, allowing the system to remain resilient & responsive during high load.
+- Synchronous communication is used for a communication where immediate response is required.
+- Asynchronous communication is used for a communication that decoupled from the caller, allowing the system to remain resilient & responsive during high load.
 
-### Sync Communication
+### Synchronous Communication
 
-For the sync communication, **HTTPS is enough**. Currently there is no sync communication that require low latency and high throughput. Also, HTTPS is simpler to implemented.
+For the sync communication, **HTTPS is enough**. Currently, there is no sync communication that require low latency and high throughput. Also, HTTPS is simpler to implemented.
 
-### Aysnc Communication
+### Asynchronous Communication
 
-For the async communication, the system must handle coordination between services to process a large number of present requests within a short period of time. The messaging technology must support the following criteria.
+For the asynchronous communication, the system must handle coordination between services to process many present requests within a short period of time. The messaging technology must support the following criteria.
 
-- Capable handling hundreds thousand of requests at a short period
-- Support at-least once delivery semantic. It ensure no lost messages with cons of possibility of duplicated messages. Duplications are accepted because our system capable of consolidating duplicate data. Exactly once delivery semantic can be considered but it resource intensive.
+- Capable handling a hundred thousands requests at a short period
+- Support at-least once delivery semantic. It ensures no lost messages with cons of possibility of duplicated messages. Duplications are accepted because our system capable of consolidating duplicate data. Exactly once delivery semantic can be considered but resource intensive.
 - Support distributing messages equally to available subscribers that deployed in different pod.
 - If possible, it has lower resource cost.
 
-We choose **Kafka** to handle async communication. It is battle tested and support majority of our criteria. Unfortunately, it has higher infrastructure and operational cost compared to some alternatives.
+We choose **Kafka** to handle asynchronous communication. It is battle tested and support majority of our criteria. Unfortunately, it has higher infrastructure and operational cost compared to some alternatives.
 
 Considered alternative:
 
@@ -48,7 +48,7 @@ Considered alternative:
 
 ### Negative
 
-- Increased system complexity due to managing both sync and async patterns.  
+- Increased system complexity due to managing both synchronous and asynchronous patterns.  
 - Kafka requires additional operational expertise and infrastructure resources.  
 - Development teams must handle potential message duplication and ensure idempotency in consumers.
 

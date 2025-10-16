@@ -4,7 +4,7 @@ There are thousand-to-millions coordinates that need to be processed into delive
 
 ## Clustering to the Rescue
 
-To solve this issue, we can generate multiple nested clusters and only choose the innermost cluster contains the addresses. Here are the visualization of the cluster (in a tree format, also imagine there are multipe country clusters).
+To solve this issue, we can generate multiple nested clusters and only choose the innermost cluster contains the addresses. Here are the visualization of the cluster (in a tree format, also imagine there are multiple country clusters).
 
 ![image](../asset/generate-route-cluster-example.svg)
 
@@ -19,7 +19,7 @@ We need to generate the routes from country-to-country, city-by-city (inside a c
 
 ## Generating Distance
 
-TSP algorithm requires a matrix containing the distance of each address but we only have the coordinate of the addresses. To calculate the distance, we can use the Haversine distance formula.
+TSP algorithm requires a matrix containing the distance of each address, but we only have the coordinate of the addresses. To calculate the distance, we can use the Haversine distance formula.
 
 ## Actual Implementation
 

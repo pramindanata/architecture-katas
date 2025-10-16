@@ -8,11 +8,11 @@ Accepted
 
 ## Context
 
-With present requests sent into Santa email address, the system need a mechanism to retrieve inbound emails and analyze it into a format that can be understand by the rest of system. The system must also capable of retrieving and handling hundred thousand of emails per second at peak period.
+With present requests sent into Santa email address, the system need a mechanism to retrieve inbound emails and analyze it into a format that can be understood by the rest of system. The system must also capable of retrieving and handling many hundred thousand emails per second at peak period.
 
 ## Decision
 
-We choose **Amazon SES** to handle the retrieve inbound emails. It offers flexible pricing and can scale better than other alternatives. We also add a **Email Request Parser Service** to analyze the email content.
+We choose **Amazon SES** to handle the retrieve inbound emails. It offers flexible pricing and can scale better than other alternatives. We also add an **Email Request Parser Service** to analyze the email content.
 
 ![diagram](../asset/adr-05-diagram.svg)
 
@@ -24,18 +24,18 @@ With SES, here are the cost estimation assuming in a month our system process 3 
 
 | Component                        | Unit Price                            | Usage                               | Monthly Cost |
 | -------------------------------- | ------------------------------------- | ----------------------------------- | ------------ |
-| **Inbound email processing**     | $0,10 / 1.000 emails                  | 3.000.000                           | **$300,00**  |
-| **Data transfer (75 KB/email)**  | $0,09 / GB                            | 3.000.000 × 75 KB ≈ 214 GB          | **$19,26**   |
-| **SNS delivery (HTTP)**          | $0,50 / 1M deliveries (first 1M free) | 3M                                  | **$1,00**    |
-| **S3 storage**                   | $0,023 / GB                           | 214 GB                              | **$4,92**    |
+| **Inbound email processing**     | $0.10 / 1,000 emails                  | 3,000,000                           | **$300.00**  |
+| **Data transfer (75 KB/email)**  | $0.09 / GB                            | 3,000,000 × 75 KB ≈ 214 GB          | **$19.26**   |
+| **SNS delivery (HTTP)**          | $0.50 / 1M deliveries (first 1M free) | 3M                                  | **$1.00**    |
+| **S3 storage**                   | $0.023 / GB                           | 214 GB                              | **$4.92**    |
 
 Total: $320.26/month
 
 Here are alternatives for retrieving the emails.
 
-- CloudMailin: it has simpler flow on sending the email information but the pricing is more expensive ($800 per month for 2 million emails).
-- MailerSend: it can only process max 500.000 emails daily. Also the pricing package include other features that not needed like sending emails, tracking, etc.
-- Setup our own infrastructure: there are many needed to be developed such as SMTP server, load balancing, anti spam, email retry, etc.
+- CloudMailin: it has simpler flow on sending the email information, but the pricing is more expensive ($800 per month for 2 million emails).
+- MailerSend: it can only process max 500,000 emails daily. Also, the pricing package include other features that not needed like sending emails, tracking, etc.
+- Set up our own infrastructure: there are many needed to be developed such as SMTP server, load balancing, anti-spam, email retry, etc.
 
 ## Consequences
 
