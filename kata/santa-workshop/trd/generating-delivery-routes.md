@@ -1,6 +1,6 @@
 # Generating Delivery Routes
 
-There are thousand-to-millions coordinates that need to be processed into delivery routes. This is a Traveling Salesmans Problem (TSP), so generating the routes in realtime with this amount of data is very-very-**very** slow & resource expensive.
+There are thousand-to-millions coordinates that need to be processed into delivery routes. This is a Traveling Salesmans Problem (TSP), so generating the routes in real-time with this amount of data is very-very-**very** slow & resource expensive.
 
 ## Clustering to the Rescue
 
