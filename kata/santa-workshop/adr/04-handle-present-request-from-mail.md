@@ -24,11 +24,11 @@ For the service.
 
 ### Retrieving the Scanned Files
 
-The system must support a bulk upload feature that only accept an image files. This uploading process will be handled by a dedicated upload service because it need to scale well with the peak traffic. The upload service will upload the file into a certain cloud storage. After a file is uploaded, this service will inform the mail request parser about this new uploaded file via async communication.
+The uploading process will be handled by a **dedicated upload service** because it need to scale better. The upload service will upload the file into a certain cloud storage. After a file is uploaded, this service will inform the **mail request parser service** about this new uploaded file via async communication.
 
 Scanning the files need to be handled manually by the Elves. The elves can use the provided upload UI in the system to upload the files from the local storage.
 
-There is another alternative, by make the scanner upload the file automatically to the cloud storage via upload service. Unfortunately, this approach requires extensive operational because it need to change the target URL frequently. The URL must be signed so no external entity can't upload files without proper authentication.
+There is another alternative, by make the scanner machines to upload the file automatically to the cloud storage via upload service. Unfortunately, this approach requires extensive operational because it need to change the target URL frequently from the scanner machines. The URL must be signed so no external entity can't upload files without proper authentication.
 
 ### Analyzing the Mail Image
 

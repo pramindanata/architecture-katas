@@ -1,0 +1,209 @@
+vars: {
+  d2-config: {
+    layout-engine: elk
+  }
+}
+
+santa: |md
+  ## Santa
+  [Person]
+| {
+  shape: c4-person
+}
+
+elf: |md
+  ## Elf
+  [Person]
+| {
+  shape: c4-person
+}
+
+ses: |md
+  ## Amazon SES
+  [Software System]
+
+  Provide email service to retrieve inbound present requests email.
+| {
+  shape: rectangle
+}
+
+sns: |md
+  ## Amazon SNS
+  [Software System]
+
+  Provide notification service to notify new present<br/> request email.
+| {
+  shape: rectangle
+}
+
+system: |md
+  ## Santa's Workshop System
+  [Software System]
+
+  System to manage present requests & delivery.
+| {
+  shape: rectangle
+  style.fill: "#87CEEB"
+  label.near: bottom-left
+}
+
+system.web: |md
+  ## Main Web
+  [Container]
+
+  A web application to access Santa's Workshop System.
+| {
+  shape: rectangle
+}
+
+system.gateway: |md
+  ## Traefik API Gateway
+  [Container]
+
+  A gateway for client applications to communicate<br /> with backend services.
+| {
+  shape: rectangle
+}
+
+system.mainService: |md
+  ## Main Service
+  [Container]
+
+  Handle present requests & delivery management.
+| {
+  shape: rectangle
+}
+
+system.mainServiceDb: |md
+  ## Main Service Database
+  [Container]
+
+  Store present request, toy production, delivery,<br/> & delievery route data.
+| {
+  shape: cylinder
+}
+
+system.uploadService: |md
+  ## Upload Service
+  [Container]
+
+  Handle bulk upload of scanned present request mails.
+| {
+  shape: rectangle
+}
+
+system.mailRequestParser: |md
+  ## Mail Request Parser Service
+  [Container]
+
+  Parse present request from mail.
+| {
+  shape: rectangle
+}
+
+system.storageMail: |md
+  ## Amazon S3 (Scanned Mail Bucket)
+  [Container]
+
+  Store scanned present request mail images.
+| {
+  shape: cylinder
+}
+
+system.ocrAiModel: |md
+  ## OCR AI Model
+  [Container]
+
+  Provide OCR AI model to extract text from scanned images.
+| {
+  shape: rectangle
+}
+
+system.parserAiModel: |md
+  ## Parser AI Model
+  [Container]
+
+  Provide Parser AI model to analyze extracted text <br/>into structured format.
+| {
+  shape: rectangle
+}
+
+system.emailRequestParser: |md
+  ## Email Request Parser Service
+  [Container]
+
+  Parse present request from email.
+| {
+  shape: rectangle
+}
+
+system.storageRawEmail: |md
+  ## Amazon S3 (Raw Email Bucket)
+  [Container]
+
+  Store raw email details.
+| {
+  shape: cylinder
+}
+
+system.cache: |md
+  ## Distributed Cache
+  [Container]
+
+  Cache geocoding data to reduce Google Maps API usage.
+| {
+  shape: cylinder
+}
+
+system.routeService: |md
+  ## Routing Service
+  [Container]
+
+  Provide routing service to generate optimal delivery routes.
+| {
+  shape: rectangle
+}
+
+map: |md
+  ## Google Maps API
+  [Software System]
+
+  Provide API for geocoding the present address.
+| {
+  shape: rectangle 
+}
+
+santa -> system.web: "Manual review present requests & handle present delivery using"
+elf -> system.web: Manage toys production & present requests using
+system.web -> system.gateway: "Communicate with backend services using\n[HTTPS]"
+system.gateway -> system.mainService: "[HTTPS]"
+system.gateway -> system.uploadService: "[HTTPS]"
+system.mainService -> system.mainServiceDb: "[DB Protocol]"
+system.uploadService -> system.mailRequestParser: {
+  label: "Notify new uploaded mail image to\n[Kafka]"
+  style.stroke-dash: 3
+}
+system.uploadService -> system.storageMail: "Upload scanned mail image to\n[HTTPS]"
+system.mailRequestParser -> system.storageMail: "Retrieve scanned mail image from\n[HTTPS]"
+system.mailRequestParser -> system.ocrAiModel: "Extract text from scanned image using\n[HTTPS]"
+system.mailRequestParser -> system.parserAiModel: "Analyze extracted text into structured format using\n[HTTPS]"
+system.mailRequestParser -> system.mainService: {
+  label: "Send analyzed present request to\n[Kafka]"
+  style.stroke-dash: 3
+}
+sns -> system.emailRequestParser: "Notify new inbound email to\n[HTTPS]"
+system.emailRequestParser -> system.storageRawEmail: "Retrieve raw email from\n[HTTPS]"
+ses -> system.storageRawEmail: "Store raw email to\n[HTTPS]"
+ses -> sns: {
+  label: "Notify new inbound email to\n[SNS]"
+  style.stroke-dash: 3
+}
+system.emailRequestParser -> system.parserAiModel: "Analyze email content into structured format using\n[HTTPS]"
+system.emailRequestParser -> system.mainService: {
+  label: "Send analyzed present request to\n[Kafka]"
+  style.stroke-dash: 3
+}
+system.mainService -> system.routeService: "Generate delivery route using\n[HTTPS]"
+system.routeService -> map: "Get geocoding data from\n[HTTPS]"
+system.routeService -> system.cache: "Get & store cached geocoding data using\n[Cache Protocol]"
+system.routeService -> system.mainServiceDb: "Store delivery route data to\n[DB Protocol]"

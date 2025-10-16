@@ -12,11 +12,11 @@ With present requests sent into Santa email address, the system need a mechanism
 
 ## Decision
 
-We choose Amazon SES to handle the retrieve inbound emails. It offers flexible pricing and can scale better than other alternatives.
+We choose **Amazon SES** to handle the retrieve inbound emails. It offers flexible pricing and can scale better than other alternatives. We also add a **Email Request Parser Service** to analyze the email content.
 
 ![diagram](../asset/adr-05-diagram.svg)
 
-Using SES to retrieve inbound emails also mean we will use S3 & SNS. S3 will be used to store the raw email MIME (including the email body) while SNS will be used to send the email metadata into our system. With retrieved email metadata, our system can fetch the raw email MIME later from the S3.
+Using SES to retrieve inbound emails also mean we will use **S3 & SNS**. S3 will be used to store the raw email MIME (including the email body) while SNS will be used to send the email metadata into our system. With retrieved email metadata, our system can fetch the raw email MIME later from the S3.
 
 For analyzing the email body, system will use the Parser AI model that explained in [ADR5](./05-handle-present-request-from-email.md).
 
@@ -49,3 +49,4 @@ Here are alternatives for retrieving the emails.
 
 - Reliance on AWS ecosystem (vendor lock-in).
 - Slightly higher integration complexity (multiple AWS services involved).
+- A new service need to be maintained.

@@ -75,8 +75,17 @@ While riding his sleigh, Santa needs locations of each home, what presents to de
 6. [ADR6 - Handle Present Request from Phone Voice Call](./adr/06-handle-present-request-from-phone-voice-call.md)
 7. [ADR7 - Retrieve Coordinate from an Address](./adr/07-retrieve-coordinate-from-an-address.md)
 8. [ADR8 - Offload Delivery Routes](./adr/08-offload-delivery-routes.md)
+9. [ADR9 - Add API Gateway](./adr/09-add-api-gateway.md)
 
 ### Diagram
+
+#### C4 - Context
+
+![diagram](./asset/c4-context.svg)
+
+#### C4 - Container
+
+![diagram](./asset/c4-container.svg)
 
 ## Other Reads
 
