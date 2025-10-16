@@ -1,0 +1,3 @@
+{"rule":"PRP_MD_NN","sentence":"^\\QNFR1: System should capable of analyze the requested present texts accurately.\\E$"}
+{"rule":"COMMA_COMPOUND_SENTENCE","sentence":"^\\QWe need an architecture that capable of handling both processes and it support the following criteria.\\E$"}
+{"rule":"ENGLISH_WORD_REPEAT_BEGINNING_RULE","sentence":"^\\QMain Service DB: a relational DB that store data used by the Main Service.\\E$"}

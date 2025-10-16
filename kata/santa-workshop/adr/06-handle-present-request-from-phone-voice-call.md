@@ -8,7 +8,7 @@ Accepted
 
 ## Context
 
-With present requests sent into Santa via phone voice-call, the system need a mechanism to retrieve the voice-call information and analyze it into a format that can be understand by the rest of system. The system must also capable of retrieving and handling hundred thousand of voice-call per second at peak period.
+With present requests sent into Santa via phone voice-call, the system need a mechanism to retrieve the voice-call information and analyze it into a format that can be understood by the rest of system. The system must also capable of retrieving and handling many hundred thousand of voice-call per second at peak period.
 
 ## Decision
 
@@ -21,9 +21,9 @@ Reasoning:
 - Simpler to implement and maintain.
 - Allows future extension to partial automation (e.g., AI transcription for voicemail only).
 
-Here are samples of the estimated cost if an automation is implemented (assuming there are 100.000 calls and each duration is 5 minutes).
+Here are samples of the estimated cost if an automation is implemented (assuming there are 100,000 calls and each duration is 5 minutes).
 
-- Using Amazon Transcribe to only transcribe the audio call. It doens't include cost to setup the infrastructure so the call can connect to the transcribe API.
+- Using Amazon Transcribe to only transcribe the audio call. It doesn't include cost to set up the infrastructure, so the call can connect to the Transcribe API.
   - Transcribe pricing = $0.024 per minute.
   - **Total cost = $9.750**
 - Using Twillio Voice API to receive the call, record call, store audio, & transcribe audio (record, store, & transcribe are inseparable).
@@ -42,4 +42,4 @@ Here are samples of the estimated cost if an automation is implemented (assuming
 
 ### Negative
 
-- Elves must handle the call, summarize the call, and input the summarize result into system manually.
+- Elves must handle the call, summarize the call, and input the summarized result into the system manually.
