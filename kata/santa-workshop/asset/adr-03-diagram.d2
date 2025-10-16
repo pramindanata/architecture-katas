@@ -1,0 +1,52 @@
+vars: {
+  d2-config: {
+    layout-engine: elk
+  }
+}
+
+mailChannel:  {
+  label: Mail Channel
+}
+
+emailChannel:  {
+  label: Email Channel
+}
+
+voiceCallChannel:  {
+  label: Voice Call Channel
+}
+
+mailRequestParser: {
+  label: Mail Request Parser Service
+  style.fill: "#87CEEB"
+}
+
+emailRequestParser: {
+  label: Email Request Parser Service
+  style.fill: "#87CEEB"
+}
+
+voiceCallRequestParser: {
+  label: Voice Call Request Parser Service
+  style.fill: "#87CEEB"
+}
+
+otherService: {
+  label: Main Service
+}
+
+mailChannel -> mailRequestParser: "Send scanned mail images\n[HTTPS]"
+emailChannel -> emailRequestParser: "Send email texts\n[HTTPS]"
+voiceCallChannel -> voiceCallRequestParser: "Send audio recordings/transcripts\n[HTTPS]"
+mailRequestParser -> otherService: {
+  label: "Send standardized present request\n[Kafka]"
+  style.stroke-dash: 3
+}
+emailRequestParser -> otherService: {
+  label: "Send standardized present request\n[Kafka]"
+  style.stroke-dash: 3
+}
+voiceCallRequestParser -> otherService: {
+  label: "Send standardized present request\n[Kafka]"
+  style.stroke-dash: 3
+}

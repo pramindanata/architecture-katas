@@ -1,0 +1,64 @@
+santa: |md
+  ## Santa
+  [Person]
+| {
+  shape: c4-person
+}
+
+elf: |md
+  ## Elf
+  [Person]
+| {
+  shape: c4-person
+}
+
+ses: |md
+  ## Amazon SES
+  [Software System]
+
+  Provide email service to retrieve inbound present requests email.
+| {
+  shape: rectangle
+}
+
+sns: |md
+  ## Amazon SNS
+  [Software System]
+
+  Provide notification service to notify new present<br/> request email.
+| {
+  shape: rectangle
+}
+
+system: |md
+  ## Santa's Workshop System
+  [Software System]
+
+  System to manage present requests & delivery.
+| {
+  shape: rectangle
+  style.fill: "#87CEEB"
+}
+
+map: |md
+  ## Google Maps API
+  [Software System]
+
+  Provide API for geocoding the present address.
+| {
+  shape: rectangle 
+}
+
+santa -> system: Manual review present requests & handle present delivery using
+elf -> system: Manage toys production & present requests using
+system -> map: {
+  label: "Get geocoding data from\n[HTTPS]"
+  style.stroke-dash: 3
+}
+
+ses -> system: "Store raw email to\n[HTTPS]"
+ses -> sns: {
+  label: "Notify new inbound email to\n[SNS]"
+  style.stroke-dash: 3
+}
+sns -> system: "Notify new inbound email to\n[HTTPS]"
