@@ -46,13 +46,12 @@ Users: 500 or so "diplomats" per "mock UN" gathering; dozens of moderators per "
 - NFR6: Moderators need privileged access.
 - NFR7: Multiple events run in parallel but only temporarily.
 - NFR8: Student should not need to install extra software.
-- NFR9: Video chat session can contain max 500 students and dozens of moderators. Total 600 users per session.
 
 ### Architecture Characteristic
 
 - (TOP) Availability: support NFR1 & NFR2
 - (TOP) Scalability: support NFR3 & NFR7
-- (TOP) Performance: support NFR4 & NFR9
+- (TOP) Performance: support NFR4
 - Cost efficiency: support NFR7
 - Security: support NFR5 & NFR6
 - Usability: support NFR8

@@ -1,8 +1,0 @@
-- Choose architecture
-- Handle video & audio streaming
-  - opsi: selfhost (livekit) & cloud (daily)
-  - problem selfhost
-    - setup infra sendiri
-    - cost meledak karena perlu handle event yg berjalan secara global. User dari berbagai region bisa join ke 1 room dan perlu stream yg low latency.
-  - problem cloud
-    - cost mahal tapi bisa mendekati selfhost yg perlu handle global scale. 

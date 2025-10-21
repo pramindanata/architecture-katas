@@ -20,9 +20,11 @@ A WebRTC framework can be used to handle this kind of problem but the chosen Web
 
 ## Decision
 
+For topology, we choose **SFU**. The video & audio streaming will be handled by **Daily**. 
+
 ### WebRTC Topology
 
-For the WebRTC topology, we will choose **SFU**.
+For the WebRTC topology, we will choose **SFU**. Here are the available topologies.
 
 #### SFU (Selective Forwarding Unit)
 
@@ -61,7 +63,7 @@ The server mixes all streams into one composite video (like one grid view). Usua
 
 ### Infrastructure
 
-We choose **Daily** for our infra to handle the video chat.
+We choose **Daily** for our infra to handle the video chat. Here are the options.
 
 > For estimating the infra cost, let's assume we have the following scenario in 1 month.
 >
