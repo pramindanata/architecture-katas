@@ -331,8 +331,8 @@ This matches my earlier calculation!
 | Solution | Monthly Cost |
 |----------|--------------|
 | **Cloud (Daily.co)** | **$24,000** |
-| **Self-Hosted (Scenario A)** | **$38,472** |
-| **Self-Hosted (Scenario B)** | **$43,200** |
-| **Self-Hosted (Scenario C)** | **$38,943** |
+| **Self-Hosted (Scenario A)** | **$23,472** |
+| **Self-Hosted (Scenario B)** | **$28,200** |
+| **Self-Hosted (Scenario C)** | **$24,943** |
 
 **Bandwidth dominates at 72% of infrastructure cost across all scenarios.**
