@@ -18,6 +18,9 @@ Users: 500 or so "diplomats" per "mock UN" gathering; dozens of moderators per "
 - A1: There less than 100 gatherings happened at the same time.
 - A2: A Mock UN event contains many video-chat.
 - A3: Only moderator can create a video chat session.
+- A4: The event will be held every week.
+- A5: The event will be held on a global scale.
+- A6: In the video chat session, only max 25 participants can open mic & video.
 
 ### Functional Requirement
 
@@ -30,23 +33,26 @@ Users: 500 or so "diplomats" per "mock UN" gathering; dozens of moderators per "
 - R7: Moderator can configure which students can open mic or muted.
 - R8: Moderator can manage and publish "mock world events" within the Mock UN event.
 - R9: Student can view published mock world event.
+- R9: Student and moderator can send messages in video chat's chat column.
+- R10: Student and moderator can see sent messages in the video chat's chat column.
 
 ### Non-Functional Requirement
 
 - NFR1: Student must not be disconnected during the debate.
 - NFR2: Moderator must be able to monitor live.
 - NFR3: Dozens of simultaneous event, each up to 500 participants.
-- NFR4: Live speech and video streaming must be low latency (under 300ms).
+- NFR4: Live video and audio streaming must be low latency (under 300ms).
 - NFR5: Students must not intrude into another events or chats.
 - NFR6: Moderators need privileged access.
 - NFR7: Multiple events run in parallel but only temporarily.
 - NFR8: Student should not need to install extra software.
+- NFR9: Video chat session can contain max 500 students and dozens of moderators. Total 600 users per session.
 
 ### Architecture Characteristic
 
 - (TOP) Availability: support NFR1 & NFR2
 - (TOP) Scalability: support NFR3 & NFR7
-- (TOP) Performance: support NFR4
+- (TOP) Performance: support NFR4 & NFR9
 - Cost efficiency: support NFR7
 - Security: support NFR5 & NFR6
 - Usability: support NFR8
