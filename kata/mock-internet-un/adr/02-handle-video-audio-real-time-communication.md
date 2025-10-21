@@ -20,7 +20,7 @@ A WebRTC framework can be used to handle this kind of problem but the chosen Web
 
 ## Decision
 
-For topology, we choose **SFU**. The video & audio streaming will be handled by **Daily**. 
+For topology, we choose **SFU**. The video & audio streaming will be handled by **Daily**.
 
 ### WebRTC Topology
 

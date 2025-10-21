@@ -1,0 +1,39 @@
+student: |md
+  ## Student
+  [Person]
+| {
+  shape: c4-person
+}
+
+moderator: |md
+  ## Moderator
+  [Person]
+| {
+  shape: c4-person
+}
+
+system: |md
+  ## Mock UN System
+  [Software System]
+
+  System for students to participate in mock UN sessions.
+| {
+  shape: rectangle
+  style.fill: "#87CEEB"
+}
+
+daily: |md
+  ## Daily Cloud
+  [Software System]
+
+  External system that provide real-time video conference service.
+| {
+  shape: rectangle 
+}
+
+student -> system: Participate in mock UN sessions using
+moderator -> system: Moderate mock UN sessions using
+system -> daily: {
+  label: "Use video conference service from\n[HTTPS]"
+  style.stroke-dash: 3
+}

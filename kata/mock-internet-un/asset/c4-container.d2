@@ -1,0 +1,67 @@
+student: |md
+  ## Student
+  [Person]
+| {
+  shape: c4-person
+}
+
+moderator: |md
+  ## Moderator
+  [Person]
+| {
+  shape: c4-person
+}
+
+system: |md
+  ## Mock UN System
+  [Software System]
+
+  System for students to participate in mock UN sessions.
+| {
+  shape: rectangle
+  style.fill: "#87CEEB"
+  label.near: bottom-left
+}
+
+system.web: |md
+  ## Main Web
+  [Container]
+
+  A web application to access Mock UN System.
+| {
+  shape: rectangle
+}
+
+system.mainService: |md
+  ## Main Service
+  [Container]
+
+  The main backend service to handle Mock UN System operations.
+| {
+  shape: rectangle
+}
+
+system.mainServiceDb: |md
+  ## Main Service DB
+  [Container]
+
+  Store mock news, moderator, student, & video session data.
+| {
+  shape: cylinder 
+}
+
+daily: |md
+  ## Daily Cloud
+  [Software System]
+
+  External system that provide real-time video conference service.
+| {
+  shape: rectangle 
+}
+
+student -> system.web: Participate in mock UN sessions using
+moderator -> system.web: Moderate mock UN sessions using
+system.web -> system.mainService: "[HTTPS]"
+system.mainService -> system.mainServiceDb: "Read from & write to\n[DB Protocol]"
+system.web -> daily: Send & receive video conference using 
+system.mainService -> daily: "Manage video rooms & participants using\n[HTTPS]"

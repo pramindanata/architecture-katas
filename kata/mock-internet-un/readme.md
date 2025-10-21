@@ -35,6 +35,8 @@ Users: 500 or so "diplomats" per "mock UN" gathering; dozens of moderators per "
 - R9: Student can view published mock world event.
 - R9: Student and moderator can send messages in video chat's chat column.
 - R10: Student and moderator can see sent messages in the video chat's chat column.
+- R11: Student register & login into the system.
+- R12: Moderator login into the system.
 
 ### Non-Functional Requirement
 
@@ -55,3 +57,26 @@ Users: 500 or so "diplomats" per "mock UN" gathering; dozens of moderators per "
 - Cost efficiency: support NFR7
 - Security: support NFR5 & NFR6
 - Usability: support NFR8
+
+## Architecture
+
+### Architecture Decision Record
+
+1. [ADR1 - Choose Architecture Style](./adr/01-choose-architecture-style.md)
+2. [ADR2 - Handle Video & Audio Real Time Communication](./adr/02-handle-video-audio-real-time-communication.md)
+3. [ADR3 - Handle Real Time Chat](./adr/03-handle-realtime-chat.md)
+
+### Diagram
+
+#### C4 - Context
+
+![diagram](./asset/c4-context.svg)
+
+#### C4 - Container
+
+![diagram](./asset/c4-container.svg)
+
+## Others
+
+- [Jitsi (Self-Host) Cost Calculation](./other/jitsi-self-host-cost-calculation.md)
+- [LiveKit (Self-Host) Cost Calculation](./other/livekit-self-host-cost-calculation.md)
