@@ -25,17 +25,21 @@ Bonus:
 
 ### Actors
 
-- Ticketing Platform: provide ticketing APIs.
 - Admin: resolving reseller support tickets.
-- Reseller: have a system where it use our APIs to manage its show & sell tickets.
+- Reseller: have a system where it uses our APIs to manage its show & sell tickets.
+- User: purchase ticket from reseller system or reseller custom web.
+- Ticketing Platform: provide ticketing APIs.
 - Reseller system: where users can see & purchase tickets. It uses the Ticketing Platform APIs for seeing & purchasing tickets.
-- User: purchase ticket from reseller system.
+- Reseller custom web: same as reseller system but it is hosted by the Ticketing Platform.
 - Payment Provider: provide APIs for billing & payment.
 
 ### Assumptions
 
 - A1: Ticket inventory is finite and must be pre-created by reseller.
-- A2: Ticketing Platform is the source of truth for ticket availability and ownership
+- A2: Ticketing Platform is the source of truth for ticket availability and ownership.
+- A3: When the ticket purchasing period of a highly anticipated show opens, the traffic can peak at a hundred of thousand purchases at a same time.
+- A4: A show can have multiple type of tickets and each type of ticket will have its own stock.
+- A5: Fraud detection will be handled by the selected payment provider.
 
 ### Functional Requirements
 
@@ -44,7 +48,7 @@ Bonus:
 - R3: Reseller system can create payment of an available ticket via APIs.
 - R4: Reseller can send a support ticket.
 - R5: Admin can process support tickets such as force refund, complain, etc.
-- R6: Reseller system can be notified certain events such as when a payment flagged as a fraud, payment paid, and looked ticket just get purchased.
+- ~~R6: Reseller system can be notified certain events such as when a payment flagged as a fraud, payment paid, and looked ticket just get purchased~~.
 - R7: Reseller can see detailed ticket sales report.
 - R8: Reseller can manage shows and their tickets (CRUD).
 - R9: Reseller can register an account to start managing shows & using the Ticketing Platform APIs. Including registering a billing information.
@@ -53,31 +57,55 @@ Bonus:
 - R12: When payment is created, the ticket will be reserved for certain duration (e.g. 15 minutes) until the payment is paid.
 - R13: Reseller can create a custom web directly instead of consuming the APIs. Extra fees will apply.
 - R14: Reseller can customize the custom web such as theme and text.
+- R15: System can detect fraud payment.
+- R16: Admin can mark shows that potentially will have high traffic when the ticket purchasing period opens.
+- R17: User can register & login into the reseller custom web.
+- R18: Reseller system can receive real time such as notification when looked ticket just get purchased.
+- R19: Reseller system can receive notification such as payment paid & payment flagged as a fraud.
 
 ### Non-Functional Requirements
 
-- NFR1: User must be notified in real time when ticket they are looking at jus got bought.
-- NFR2: System must handle traffic spike at certain period especially for high profiled shows (max to a million requests at a same time).
-- NFR3: System must ensure the concistency of the ticket inventory.
-- NFR4: System must ensure reseller can only see it's own data.
-- NFR5: System must provide clear APIs contracts, backward compatibility, & versioning.
-- NFR6: System must handle thousand of resellers where each can have thousands to millions users.
-- NFR7: System must ensure a ticket can't be bought twice.
-
-## Design
-
-- Ticket purchase idempotency.
-- Real time notification whe looked ticket just get bought.
-- Create custom web per reseller with their own theme & config (how?)
-- System must support per-region isolation of reseller and user data (??? bingung apa yg dipisah dan apakah ini berarti multitenancy. Skip aja untuk dipelajari?)
+- NFR1: System must handle traffic spike at certain period especially for highly anticipted shows (see A3).
+- NFR2: System must ensure strong consistency and correctness of ticket inventory (no double purchase).
+- NFR3: System must ensure reseller can only see its own data.
+- NFR4: System must provide clear APIs contracts, backward compatibility, & versioning.
+- NFR5: System must handle a thousand of resellers where each can have thousands to millions users.
+- NFR6: System must have 99.9% availability when the ticket purchasing period opens.
 
 ## Architecture Drives
 
-## Domain Understanding
+- (Top) Consistency: NFR2
+- (Top) Availability: NFR6
+- (Top) Elasticity: NFR1
+- Scalability: NFR5
+- Interoperability: NFR4
+- Security: NFR3
 
-- Ticket lifecycle
-- Payment lifecycle
-- Reservation expiration
-- Refund path
+Note:
 
-## High Level Design
+- Ensuring ticket stock correctness while handling massive traffic spike when the ticket purchasing period opens is the main challenge for this system.
+- Interoperability seems a priority because it affects reseller adoption, but it doesn't force fundamental architecture trade-off (scaling, locking, etc.) and only requires higher discipline in API design.
+- Scalability is important, but it can be achieved by applying proper scaling technique such as sharding, partitioning, etc. which is a common solution.
+
+## Spikes
+
+- X Ticket purchase idempotency.
+- X Ticket inventory consistency.
+- X Purchase ticket flow
+- auth mechanism
+- Create custom web per reseller with their own theme & config (how?)
+- Send ticket sold out notification in real time from ticketing to reseller system.
+- Choosing payment provider (need support high traffic & fraud detection) (langsung ADR)
+  - ugh kyknya beberapa provider engga publish angka. Alhasil perlu contact provider tsb atau bahkan perlu buat perjanjian.
+
+## Design
+
+- Choosing architecture (split domain but single DB)
+- Handle ticket purchase (queue & notify)
+- Handling payment
+- Handling custom web
+- Handling SSE from ticketing to reseller system (reseller system need to send SSE request manually to the ???)
+
+## Reference
+
+- [Scaling Ticket Booking Systems: A Deep Dive into High-Performance Design](https://blog.vineet.pro/blog/ticket-booking-system-design)

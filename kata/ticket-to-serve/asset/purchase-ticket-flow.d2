@@ -1,0 +1,46 @@
+shape: sequence_diagram
+
+user: User
+client: Client
+backend: Backend Server
+queue: Message Queue
+db: Database
+payment: Payment Provider
+
+user->client: Order tickets
+client->backend: Send an "order tickets" request
+backend->queue: Dispatch an "order tickets" job
+backend->client: Send "OK" response
+queue->backend: The "order tickets" job out of queue {
+  style: {
+    stroke-dash: 3
+  }
+}
+backend->db: Create order records & decrement ticket stocks
+backend->queue: Dispatch a "reverse ticket stocks" delayed job 
+backend->client: Notify order created via SSE
+client->user: Display order created info
+if user want to complete the order: {
+  user->client: Complete the order
+  client->backend: Send a "create payment" request
+  backend->payment: Create payment session
+  backend->client: Send payment session info
+  client->user: Redirect to payment provider
+  user->payment: Complete the payment
+  payment->backend: Notify payment completed via webhook
+  backend->queue: Cancel the "reverse ticket stocks" delayed job
+  backend->db: Update order status to "paid"
+  backend->client: Notify payment completed via SSE
+  client->user: Display payment completed info
+  else {
+    queue->backend: The "reverse ticket stocks" delayed job executed {
+      style: {
+        stroke-dash: 3
+      }
+    }
+    backend->db: Reverse ticket stocks & update order status to "cancelled"
+    backend->client: Notify order cancelled via SSE
+    client->user: Display order cancelled info
+    user."User need to start over the order process if they still want to purchase tickets."
+  }
+}
