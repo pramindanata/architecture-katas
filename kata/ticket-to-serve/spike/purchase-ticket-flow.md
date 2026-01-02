@@ -22,7 +22,7 @@ Each order have its own expiration time. If the expiration time reached, system 
 
 Users also need to know how long to wait and number of users that are ahead of them in the queue. We can provide an estimated waiting time based on the average processing time of the queue handler and number of messages in the queue.
 
-Using a queue that use stream-based log (such as Kafka or Redis Stream) can slow down the traffic well. Each consumer can only process 1 message per partition per topic at a time. Applying custom topic & partition can also maximize the throughput, for example:
+Using stream-based or log-based queue (such as Kafka or Redis Stream) can slow down the traffic well. Each consumer can only process 1 message per partition per topic at a time. Applying custom topic & partition can also maximize the throughput, for example:
 
 ```js
  // dedicated for highly anticipated shows that have million of tickets.

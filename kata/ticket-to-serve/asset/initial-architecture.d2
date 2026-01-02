@@ -1,0 +1,60 @@
+admin: {
+  label: Admin
+  shape: c4-person
+}
+
+reseller: {
+  label: Reseller
+  shape: c4-person
+}
+
+user: {
+  label: User
+  shape: c4-person
+}
+
+resellerDashboard: Reseller Dashboard
+resellerCustomWeb: Reseller Custom Web
+adminDashboard: Admin Dashboard
+resellerSystem: Reseller System 
+
+gateway: { 
+  label: API Gateway
+  shape: hexagon
+}
+
+reseller -> resellerDashboard
+user -> resellerCustomWeb
+admin -> adminDashboard
+
+coreOrderTicketService: Core Order Ticket Service
+coreExploreTicketService: Explore Ticket Service
+ticketManagementService: Ticket Management Service
+adminService: Admin Service
+notificationService: Notification Service
+customWebService: Custom Web Service
+customWebOrderService: Custom Web Order Service
+
+database: {
+  label: Database
+  shape: cylinder
+}
+
+resellerDashboard -> gateway: Manage tickets
+resellerCustomWeb -> gateway: Browse & order tickets
+adminDashboard -> gateway: Manage platform
+resellerSystem -> gateway: Integrate with ticketing platform
+gateway -> coreOrderTicketService
+gateway -> coreExploreTicketService
+gateway -> ticketManagementService
+gateway -> adminService
+gateway -> notificationService
+gateway -> customWebService
+gateway -> customWebOrderService
+coreOrderTicketService -> database
+coreExploreTicketService -> database
+ticketManagementService -> database
+adminService -> database
+notificationService -> database
+customWebService -> database
+customWebOrderService -> database 

@@ -35,7 +35,7 @@ Bonus:
 
 - A1: Ticket inventory is finite and must be pre-created by reseller.
 - A2: Ticketing Platform is the source of truth for ticket availability and ownership.
-- A3: When the ticket purchasing period of a highly anticipated show opens, the traffic can peak at a hundred of thousand purchases at a same time.
+- A3: When the ticket purchasing period of a highly anticipated show opens, the traffic can peak at hundreds of thousands of purchases at the same time.
 - A4: A show can have multiple type of tickets and each type of ticket will have its own stock.
 - A5: Fraud detection will be handled by the selected payment provider.
 - A6: Posted shows are like concerts, sport events, etc. that only held at specific location, date, & time.
@@ -44,8 +44,8 @@ Bonus:
 
 #### Ticketing Platform APIs
 
-- Platform can return list of reseller's shows.
-- Platform can return list of available show's tickets.
+- Platform can return reseller's shows details.
+- Platform can return available show's tickets details.
 - Platform can create order & payment of the selected tickets.
 - Platform can create request refund.
 - Platform can receive notification from payment provider such as payment success, failure, refund processed, fraud detected, etc.
@@ -112,6 +112,14 @@ Note:
 - X Create custom web per reseller with their own theme & config (how?)
 
 ## Design
+
+- Initial Architecture
+- Selecting Payment Provider
+- Selecting Email Provider
+- Scaling Ticket Purchase Flow
+- Scaling Explore Tickets
+- Scaling Real Time Communication
+- Service Communication
 
 - Choosing architecture (split domain but single DB)
 - Handle ticket purchase (queue & notify)
