@@ -21,17 +21,15 @@ Bonus:
 - You may want to provide some hosting capability to your reseller to lower their technical burden
 - As some country have constraining legislation, you want to keep in mind the possibility of completely separating your client or user base for specific legislation
 
+> I skip the last bonus part because I need to explore more information about the constraint.
+
 ## Discovery
 
 ### Actors
 
+- Reseller: have a system where it uses our APIs to sell the tickets or host a custom web.
+- User: purchase ticket from reseller's system or reseller's custom web.
 - Admin: resolving reseller support tickets.
-- Reseller: have a system where it uses our APIs to manage its show & sell tickets.
-- User: purchase ticket from reseller system or reseller custom web.
-- Ticketing Platform: provide ticketing APIs.
-- Reseller system: where users can see & purchase tickets. It uses the Ticketing Platform APIs for seeing & purchasing tickets.
-- Reseller custom web: same as reseller system but it is hosted by the Ticketing Platform.
-- Payment Provider: provide APIs for billing & payment.
 
 ### Assumptions
 
@@ -40,32 +38,48 @@ Bonus:
 - A3: When the ticket purchasing period of a highly anticipated show opens, the traffic can peak at a hundred of thousand purchases at a same time.
 - A4: A show can have multiple type of tickets and each type of ticket will have its own stock.
 - A5: Fraud detection will be handled by the selected payment provider.
+- A6: Posted shows are like concerts, sport events, etc. that only held at specific location, date, & time.
 
 ### Functional Requirements
 
-- R1: Reseller system can fetch list of owned shows via APIs.
-- R2: Reseller system can fetch list of available tickets of an owned show via APIs.
-- R3: Reseller system can create payment of an available ticket via APIs.
-- R4: Reseller can send a support ticket.
-- R5: Admin can process support tickets such as force refund, complain, etc.
-- ~~R6: Reseller system can be notified certain events such as when a payment flagged as a fraud, payment paid, and looked ticket just get purchased~~.
-- R7: Reseller can see detailed ticket sales report.
-- R8: Reseller can manage shows and their tickets (CRUD).
-- R9: Reseller can register an account to start managing shows & using the Ticketing Platform APIs. Including registering a billing information.
-- R10: User can complete a ticket payment through a Payment Provider. Each complete purchase will be deducted by x% for the platform and payment provider.
-- R11: Reseller system can request a payment refund.
-- R12: When payment is created, the ticket will be reserved for certain duration (e.g. 15 minutes) until the payment is paid.
-- R13: Reseller can create a custom web directly instead of consuming the APIs. Extra fees will apply.
-- R14: Reseller can customize the custom web such as theme and text.
-- R15: System can detect fraud payment.
-- R16: Admin can mark shows that potentially will have high traffic when the ticket purchasing period opens.
-- R17: User can register & login into the reseller custom web.
-- R18: Reseller system can receive real time such as notification when looked ticket just get purchased.
-- R19: Reseller system can receive notification such as payment paid & payment flagged as a fraud.
+#### Ticketing Platform APIs
+
+- Platform can return list of reseller's shows.
+- Platform can return list of available show's tickets.
+- Platform can create order & payment of the selected tickets.
+- Platform can create request refund.
+- Platform can receive notification from payment provider such as payment success, failure, refund processed, fraud detected, etc.
+- Platform can send email notification to user such as ticket purchased, refund processed, fraud detected, etc.
+- Platform can return queue status for the user order.
+- Platform can return created orders.
+- Platform can send real time notification to reseller system such as ticket sold out, fraud detected, etc. via webhook.
+
+#### Reseller Dashboard
+
+- Reseller can register an account to start managing shows & using the Ticketing Platform APIs. Including billing information.
+- Reseller can manage shows and their tickets.
+- Reseller can see detailed ticket sales report.
+- Reseller can send a support ticket.
+- Reseller can create & customize a custom web instead of consuming the APIs. Extra fees will apply.
+
+#### Custom Web
+
+- User can register & login into the reseller custom web.
+- User can explore available shows.
+- User can order tickets.
+- User can complete ticket payment.
+- User can receive real time notification when the ticket they are looking at just got purchased.
+- User can see his/her queue status.
+- User can see his/her created orders.
+
+#### Admin Dashboard
+
+- Admin can process support tickets such as force refund, complain, etc.
+- Admin can mark shows that potentially will have high traffic when the ticket purchasing period opens.
 
 ### Non-Functional Requirements
 
-- NFR1: System must handle traffic spike at certain period especially for highly anticipted shows (see A3).
+- NFR1: System must handle traffic spike at certain period especially for highly anticipated shows (see A3).
 - NFR2: System must ensure strong consistency and correctness of ticket inventory (no double purchase).
 - NFR3: System must ensure reseller can only see its own data.
 - NFR4: System must provide clear APIs contracts, backward compatibility, & versioning.
@@ -84,6 +98,7 @@ Bonus:
 Note:
 
 - Ensuring ticket stock correctness while handling massive traffic spike when the ticket purchasing period opens is the main challenge for this system.
+- Ticket oversell need to be avoided because it will lead to potential user dissatisfaction and bad reputation to the company. Unlike airline ticketing where oversell is common, airlines can accommodate more passengers due to no-shows or cancellations.
 - Interoperability seems a priority because it affects reseller adoption, but it doesn't force fundamental architecture trade-off (scaling, locking, etc.) and only requires higher discipline in API design.
 - Scalability is important, but it can be achieved by applying proper scaling technique such as sharding, partitioning, etc. which is a common solution.
 
@@ -92,11 +107,9 @@ Note:
 - X Ticket purchase idempotency.
 - X Ticket inventory consistency.
 - X Purchase ticket flow
-- auth mechanism
-- Create custom web per reseller with their own theme & config (how?)
-- Send ticket sold out notification in real time from ticketing to reseller system.
-- Choosing payment provider (need support high traffic & fraud detection) (langsung ADR)
-  - ugh kyknya beberapa provider engga publish angka. Alhasil perlu contact provider tsb atau bahkan perlu buat perjanjian.
+- X Send ticket sold out notification in real time from ticketing to reseller system.
+- X Auth mechanism
+- X Create custom web per reseller with their own theme & config (how?)
 
 ## Design
 

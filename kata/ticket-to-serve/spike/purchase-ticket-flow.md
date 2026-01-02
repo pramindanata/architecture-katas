@@ -2,17 +2,27 @@
 
 ## Problem
 
-With requirements where no user can buy same ticket twice and peak traffic that can up to a hundred of thousand purchases at the same time, we need to design a proper order ticket flow that ensure the ticket stock consistency, good performance, and fairness among the users.
+We need to design a ticket purchase flow that can fulfill the following constraints:
+
+- Handle massive traffic spike when the ticket purchasing period opens for highly anticipated shows.
+- Ensure strong consistency and correctness of ticket inventory. No double purchase & oversell.
+- Ensure fairness. Users who order first should have higher chance to get the ticket.
 
 ## Solution
 
-### Handling Traffic
+Here is the general idea of the flow. Some aspect may be missing such as check available stock from memory store before publishing the order into queue.
 
-To handle massive traffic, we can use queue to distribute them. Each order request will be placed in a queue and users will wait until their requests are processed. When the request out from the queue, system starts to reserve the ticket by decrement the ticket stock, create order records, and notify client side, so user can complete the payment process.
+![diagram](../asset/purchase-ticket-flow.svg)
+
+### Handling the Traffic
+
+To handle massive traffic, we can use queue to distribute the load. Each order request will be placed in a queue and users will wait until their requests are processed. When the request out from the queue, system starts to reserve the ticket by decrement the ticket stock, create order records, and notify client side, so user can complete the payment process.
 
 Each order have its own expiration time. If the expiration time reached, system will revert the stock and cancel the order.
 
-Using a queue that use stream-based log (such as Kafka or Redis Stream) can slow down the traffic because each consumer can only process 1 message per partition per topic at a time. Applying custom topic & partition can also maximize the throughput, for example:
+Users also need to know how long to wait and number of users that are ahead of them in the queue. We can provide an estimated waiting time based on the average processing time of the queue handler and number of messages in the queue.
+
+Using a queue that use stream-based log (such as Kafka or Redis Stream) can slow down the traffic well. Each consumer can only process 1 message per partition per topic at a time. Applying custom topic & partition can also maximize the throughput, for example:
 
 ```js
  // dedicated for highly anticipated shows that have million of tickets.
@@ -128,6 +138,8 @@ The read & decrement process must be atomic, so the memory store need to support
 
 If it is possible, the read, decrement, & publish operations must be atomic. If the publish operation use different technology, at least the delayed "revert stock" job (explained in the another section), will ensure the stock consistency.
 
+Also, if the stock value in memory store is larger than in DB, at least the queue handler will not decrement the stock if it was already 0.
+
 #### DB - Split the Record into the Smallest Value
 
 We can split the ticket record further. If a ticket stock is 1,000,000, then we store 1,000,000 of ticket records instead of 1 record. This will avoid lock contention but data size grow drastically. If there are 100 tickets that each has a million stocks, then the DB will store 100,000,000 records.
@@ -143,3 +155,14 @@ To notify client side after an order record is created, system can use technolog
 What if user don't complete the payment? The ticket stock should be reverted so other users can order it. We can use technique like scheduler or delayed job to revert the stock. Scheduler is the simpler approach but not real time. Delayed job offer is real time, but it will use more resources to store and process the job.
 
 Scheduler can be a solution to handle this problem because there is no restriction about how fast user could see the reverted ticket stock. We can make the scheduler to run frequently (such as each 30s) but we need to ensure each execution don't process same reserved ticket twice.
+
+### What If User Accidentally Closed the Browser?
+
+We may need to store the following states in a memory store to allow the user see the queue position when the user open the browser again.
+
+- Total of received order.
+- Total of processed order.
+- Number of the user order in the queue.
+- Estimated order process time.
+
+If the order already created, user can see it immediately in web page, so he/she can complete the payment.

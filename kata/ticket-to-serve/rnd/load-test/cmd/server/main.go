@@ -108,8 +108,7 @@ func main() {
 
 		defer tx.Rollback(r.Context())
 
-		// Short term solution to prevent PG to do sequential scans.
-		// When the available data is less than 700K, PG tends to do sequential scans.
+		// Short term solution to prevent PG to do sequential scans when the available data is less than ~700K,
 		// It caused the p95 latency to spike from 15ms to 2s.
 		_, err = tx.Exec(r.Context(), "SET LOCAL enable_seqscan = off;")
 
@@ -145,14 +144,12 @@ func main() {
 				ticketUnitIDs = append(ticketUnitIDs, id)
 			}
 
-			// Check for errors during iteration
 			if err := rows.Err(); err != nil {
 				rows.Close()
 				http.Error(w, fmt.Sprintf("Error iterating rows: %s", err), http.StatusInternalServerError)
 				return
 			}
 
-			// CRITICAL: Close rows immediately after use, not deferred
 			rows.Close()
 
 			if len(ticketUnitIDs) < ticket.Count {
