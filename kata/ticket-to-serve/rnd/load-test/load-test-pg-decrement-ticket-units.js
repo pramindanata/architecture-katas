@@ -41,5 +41,5 @@ export default function () {
     },
   };
 
-  http.post(`${BASE_URL}/pg-reserve-ticket`, payload, params);
+  http.post(`${BASE_URL}/pg-decrement-ticket-units`, payload, params);
 }

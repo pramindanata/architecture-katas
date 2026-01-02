@@ -1,6 +1,6 @@
 # ADR01 - Choosing Architecture Style
 
-Date: 2025-01-02
+Date: 2026-01-02
 
 ## Status
 
@@ -21,7 +21,7 @@ Not all features require the same level of consistency, availability, and elasti
 
 ## Decision
 
-We choose **Service Based Architecture**.
+I choose **Service Based Architecture**.
 
 ![diagram](../asset/architecture-styles-worksheet.jpg)
 

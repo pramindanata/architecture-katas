@@ -6,7 +6,7 @@ How the ticketing platform authenticate the reseller backend request?
 
 ## Solution
 
-There are some approaches that can be applied here. Personally I prefer API Key for its simplicity. OAuth 2.0 can be the alternative if we need more secure & complex auth mechanism.
+There are some approaches that can be applied here. Personally I prefer API Key for its simplicity. OAuth 2.0 can be the alternative if I need more secure & complex auth mechanism.
 
 ### API Key
 

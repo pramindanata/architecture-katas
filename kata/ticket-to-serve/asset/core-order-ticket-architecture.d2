@@ -1,0 +1,33 @@
+gateway: {
+  label: API Gateway
+  shape: hexagon
+}
+
+coreOrderTicketService: Core Order Ticket Service
+ticketManagementService: Ticket Management Service
+notificationService: Notification Service
+paymentProvider: Payment Provider X
+
+database: {
+  label: PostgreSQL DB
+  shape: cylinder
+}
+
+memoryStore: {
+  label: Redis
+  shape: cylinder
+}
+
+gateway -> coreOrderTicketService: "Order tickets\n[HTTPS]"
+coreOrderTicketService -> database: "Read & write order & ticket stock data\n[PG Protocol]"
+coreOrderTicketService -> memoryStore: "Read & write ticket stock\n[Redis Protocol]"
+coreOrderTicketService <-> ticketManagementService: {
+  label: "Sync ticket stock data\n[Kafka]"
+  style.stroke-dash: 3
+}
+coreOrderTicketService -> paymentProvider: "Create payment\n[HTTPS]"
+paymentProvider -> coreOrderTicketService: "Notify payment\n[HTTPS]"
+coreOrderTicketService -> notificationService: {
+  label: "Send notification\n[Kafka]"
+  style.stroke-dash: 3
+}

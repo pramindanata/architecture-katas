@@ -102,7 +102,7 @@ To run this tests, follow these steps:
 1. Run `go run ./cmd/setup-redis` to setup Redis with initial stock value.
 2. Run `k6 run load-test-simple-redis-decrement.js` or `k6 run load-test-complex-redis-decrement.js` to run the load test.
 
-### PostgreSQL `SELECT ... FOR UPDATE SKIP LOCKED`
+### PostgreSQL - Decrementing Ticket Units
 
 With the sharding ticket solution that explained in [this doc](../../spike/purchase-ticket-flow.md), I want to see how well the query perform with a million of records.
 
@@ -145,7 +145,7 @@ With 1000 VUs & 100,000 iterations, it got ~3400 RPS with p95 latency ~380ms.
 To run this test, follow these steps:
 
 1. Run `go run ./cmd/setup-pg` to setup PostgreSQL with initial ticket units.
-2. Run `k6 run load-test-pg-reserve-ticket.js` to run the load test.
+2. Run `k6 run load-test-pg-decrement-ticket-units.js` to run the load test.
 
 To achieve this performance, some tuning in PostgreSQL are required such as.
 
@@ -176,3 +176,44 @@ Previously I set the pool's max connection to 1,000 without knowing that it shou
 
 Remember that increasing the number of connection is not always the best solution because it can lead to connection thrashing. It's better to find the optimal number of connections based on the workload and database capacity. Also, more connections require more resources on the database server.
 
+### PostgreSQL - Decrementing Tickets
+
+This test focuses on decrementing a `tickets` directly. The result was with 1,000 VUs & 100,000 iterations, it got ~1600 RPS with p95 latency ~800ms.
+
+```bash
+         /\      Grafana   /‾‾/  
+    /\  /  \     |\  __   /  /   
+   /  \/    \    | |/ /  /   ‾‾\ 
+  /          \   |   (  |  (‾)  |
+ / __________ \  |_|\_\  \_____/ 
+
+     execution: local
+        script: load-test-pg-decrement-ticket.js
+        output: -
+
+     scenarios: (100.00%) 1 scenario, 1000 max VUs, 10m30s max duration (incl. graceful stop):
+              * default: 100000 iterations shared among 1000 VUs (maxDuration: 10m0s, gracefulStop: 30s)
+
+  █ TOTAL RESULTS 
+
+    HTTP
+    http_req_duration..............: avg=611ms    min=5.44ms med=660.1ms  max=1.31s p(90)=766.65ms p(95)=807.55ms
+      { expected_response:true }...: avg=611ms    min=5.44ms med=660.1ms  max=1.31s p(90)=766.65ms p(95)=807.55ms
+    http_req_failed................: 0.00%  0 out of 100000
+    http_reqs......................: 100000 1624.898939/s
+
+    EXECUTION
+    iteration_duration.............: avg=611.23ms min=5.5ms  med=660.25ms max=1.31s p(90)=766.78ms p(95)=807.69ms
+    iterations.....................: 100000 1624.898939/s
+    vus............................: 810    min=810         max=1000
+    vus_max........................: 1000   min=1000        max=1000
+
+    NETWORK
+    data_received..................: 15 MB  250 kB/s
+    data_sent......................: 14 MB  229 kB/s
+```
+
+To run this test, follow these steps:
+
+1. Run `go run ./cmd/setup-pg` to setup PostgreSQL with initial ticket units.
+2. Run `k6 run load-test-pg-decrement-tickets.js` to run the load test.

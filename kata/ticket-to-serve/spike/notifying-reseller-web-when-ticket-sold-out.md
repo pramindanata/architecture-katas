@@ -6,7 +6,7 @@ There is the following statement in the kata.
 
 > User wants to be notified when a ticket they are looking at just got bought.
 
-With custom web, the web can establish an SSE connection with the ticketing platform to receive the real time notification. But how we handle this kind notification if the reseller use our APIs to build their own web?
+With custom web, the web can establish an SSE connection with the ticketing platform to receive the real time notification. But how I handle this kind notification if the reseller use our APIs to build their own web?
 
 ## Solution
 

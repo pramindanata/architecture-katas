@@ -84,7 +84,7 @@ func main() {
 
 	mux := http.NewServeMux()
 
-	mux.HandleFunc("POST /pg-reserve-ticket", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("POST /pg-decrement-ticket-units", func(w http.ResponseWriter, r *http.Request) {
 		var body RequestBody
 		err := json.NewDecoder(r.Body).Decode(&body)
 
@@ -230,6 +230,41 @@ func main() {
 		}
 
 		fmt.Fprint(w, "Success")
+	})
+
+	mux.HandleFunc("POST /pg-decrement-ticket", func(w http.ResponseWriter, r *http.Request) {
+		tx, err := pool.Begin(r.Context())
+
+		if err != nil {
+			http.Error(w, fmt.Sprintf("Failed to begin transaction: %s", err), http.StatusInternalServerError)
+			return
+		}
+
+		defer tx.Rollback(r.Context())
+
+		_, err = tx.Exec(r.Context(), "SET LOCAL enable_seqscan = off;")
+
+		if err != nil {
+			http.Error(w, fmt.Sprintf("Failed to set enable_seqscan: %s", err), http.StatusInternalServerError)
+			return
+		}
+
+		updateQuery := "UPDATE tickets SET stock = stock - 1 WHERE id = 'a'"
+
+		_, err = tx.Exec(r.Context(), updateQuery)
+
+		if err != nil {
+			http.Error(w, fmt.Sprintf("Failed to decrement ticket stock: %s", err), http.StatusInternalServerError)
+			return
+		}
+
+		if err := tx.Commit(r.Context()); err != nil {
+			http.Error(w, fmt.Sprintf("Failed to commit transaction: %s", err), http.StatusInternalServerError)
+			return
+		}
+
+		w.WriteHeader(http.StatusOK)
+		fmt.Fprint(w, "Ticket stock decremented successfully")
 	})
 
 	mux.HandleFunc("POST /simple-redis-decrement", func(w http.ResponseWriter, r *http.Request) {

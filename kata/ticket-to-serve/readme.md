@@ -114,12 +114,12 @@ Note:
 ## Design
 
 - Initial Architecture
-- Selecting Payment Provider
-- Selecting Email Provider
-- Scaling Ticket Purchase Flow
-- Scaling Explore Tickets
-- Scaling Real Time Communication
-- Service Communication
+- Scaling core order ticket service
+- Scaling core explore ticket service
+- Scaling notification service
+- Scaling custom web service (include scale the SSE part)
+- Scaling custom web order service
+- Scaling admin & ticket management service
 
 - Choosing architecture (split domain but single DB)
 - Handle ticket purchase (queue & notify)

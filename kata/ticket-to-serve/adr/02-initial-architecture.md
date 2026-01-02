@@ -1,6 +1,6 @@
 # ADR02 - Initial Architecture
 
-Date: 2025-01-02
+Date: 2026-01-02
 
 ## Status
 
@@ -8,7 +8,7 @@ Accepted
 
 ## Context
 
-With the discovered requirements and constraints from the discovery phase, we need to design the initial architecture for this system.
+With the discovered requirements and constraints from the discovery phase, I need to design the initial architecture for this system.
 
 ## Decision
 
@@ -24,7 +24,7 @@ There is also the reseller system that will consume the Ticketing Platform APIs.
 
 ### Backend Service
 
-Based on the available functional requirements, we separate the backend service into several bounded contexts:
+Based on the available functional requirements, I separate the backend service into several bounded contexts:
 
 #### Core Order Ticket Service
 
@@ -89,13 +89,13 @@ This service will handle ticket order from reseller custom web. Responsibilities
 - User can see his/her queue status.
 - User can see his/her created orders.
 
-We need to separate this service from the custom web service because the high load during ticket purchase period. The majority of the logics will be handled by the core order ticket service.
+I need to separate this service from the custom web service because the high load during ticket purchase period. The majority of the logics will be handled by the core order ticket service.
 
 ### Database
 
-For the initial architecture, we will use a single relational database for all services. We choose PostgreSQL for its reliability, data correctness, features, and strong community support. Next ADR will discuss more about using dedicated or even specialized database per service.
+For the initial architecture, I will use a single relational database for all services. I choose PostgreSQL for its reliability, data correctness, features, and strong community support. Next ADR will discuss more about using dedicated or even specialized database per service.
 
-To achieve strong availability, each DB especially for the core order & explore ticket services will be deployed horizontally. Unfortunately we need to use extension like Citus to achieve this because PostgreSQL does not support sharding natively.
+To achieve strong availability, each DB especially for the core order & explore ticket services will be deployed horizontally. Unfortunately I need to use extension like Citus to achieve this because PostgreSQL does not support sharding natively.
 
 The cons of choosing PostgreSQL is slower read & write performance compared to other distributed DB such as CockroachDB or NewSQL DBs. But with proper optimization and caching layer, I think PostgreSQL can handle the load well. Also, other features don't require special data structure that need specialized DB to achieve better performance.
 
@@ -106,14 +106,14 @@ Alternatives considered:
 
 ### API Gateway
 
-Because there are many services that need to be exposed to the client applications, we will use an API Gateway to simplify the service discovery from the client side. Also, the API Gateway must capable of handling the following requirements.
+Because there are many services that need to be exposed to the client applications, I will use an API Gateway to simplify the service discovery from the client side. Also, the API Gateway must capable of handling the following requirements.
 
 - Handling hundreds of thousands of requests at peak time.
 - Rate limiting to prevent abuse from clients especially when the order ticket period is open.
 
 Logging & authentication can be handled by each service because of certain needs such as ensuring no service can be accessed without proper authentication and complete log data.
 
-We choose **Kong Gateway** as the API Gateway because of its performance, ease of use, and global rate limiting feature. The cons of this choice are:
+I choose **Kong Gateway** as the API Gateway because of its performance, ease of use, and global rate limiting feature. The cons of this choice are:
 
 - Redis will be the hot path.
 - Higher memory usage than NGINX.
@@ -121,9 +121,9 @@ We choose **Kong Gateway** as the API Gateway because of its performance, ease o
 
 ### Backend Service Communication
 
-For service-to-service communication, we will use synchronous HTTP communication for most of the cases because it is simpler to implement and debug. Adding message queue for asynchronous communication will be considered in the next ADR because the ticket order flow requires queue to distribute the load.
+For service-to-service communication, I will use synchronous HTTP communication for most of the cases because it is simpler to implement and debug. Adding message queue for asynchronous communication will be considered in the next ADR because the ticket order flow requires queue to distribute the load.
 
-The gRPC can be considered in the future if we need better performance and strong typing between services, but tooling and debugging is more complex than HTTP.
+The gRPC can be considered in the future if I need better performance and strong typing between services, but tooling and debugging is more complex than HTTP.
 
 ### Result
 
