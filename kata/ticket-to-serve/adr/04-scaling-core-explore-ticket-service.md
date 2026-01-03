@@ -28,7 +28,7 @@ Using the same Redis instance used by the core order ticket service is not a goo
 
 ### Show & Ticket Data Sync
 
-The ticket management service is the source of truth for show & ticket data. To sync the data to the core explore ticket service, I can use the same **Kafka** instance proposed for the core order ticket service architecture to send the data update event.
+The reseller service is the source of truth for show & ticket data. To sync the data to the core explore ticket service, I can use the same **Kafka** instance proposed for the core order ticket service architecture to send the data update event.
 
 ### Result
 
@@ -38,9 +38,9 @@ The ticket management service is the source of truth for show & ticket data. To 
 
 ### Positive
 
-- High availability and elasticity during traffic spike.
-- Fast read operation for show & ticket data.
-- Easy to maintain & operate because it uses familiar technology stack.
+- Allow high availability and elasticity during traffic spike.
+- Allow fast read operation for show & ticket data.
+- No new technology is introduced to the architecture.
 
 ### Negative
 

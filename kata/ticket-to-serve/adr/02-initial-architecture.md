@@ -45,7 +45,7 @@ This is the second service that also need high availability & elasticity because
 - Platform can return reseller's shows details.
 - Platform can return available show's tickets details.
 
-#### Ticket Management Service
+#### Reseller Service
 
 This service will handle reseller's shows & tickets management. Responsibilities:
 
@@ -62,7 +62,7 @@ This service will handle admin operations. Responsibilities:
 - Admin can process support tickets such as force refund, complain, etc.
 - Admin can mark shows that potentially will have high traffic when the ticket purchasing period opens.
 
-I think this service can be merged into Ticket Management Service if the operational load is small.
+I think this service can be merged into Reseller Service if the operational load is small.
 
 #### Notification Service
 
@@ -73,25 +73,19 @@ This service will handle all notification sending such as email, webhook, etc. B
 
 #### Custom Web Service
 
-This service will handle some functionalities for reseller custom web. Responsibilities:
+This service will handle functionalities for reseller custom web. Responsibilities:
 
+- Custom web can retrieve the custom web configurations.
 - User can register & login into the reseller custom web.
 - User can explore available shows & tickets details.
-- User can receive real time notification when the ticket they are looking at just got purchased.
-
-Some functionalities such as explore shows will require have higher load, but because the majority of the logics will be handled by the core explore ticket service, this service should have smaller load.
-
-The real time notification can be handled by WebSocket or Server-Sent Events (SSE). It will be explored further in the next ADR.
-
-#### Custom Web Order Service
-
-This service will handle ticket order from reseller custom web. Responsibilities:
-
 - User can order tickets.
 - User can see his/her queue status.
 - User can see his/her created orders.
+- User can receive real time notification when the ticket they are looking at just got purchased.
 
-I need to separate this service from the custom web service because the high load during ticket purchase period. The majority of the logics will be handled by the core order ticket service.
+Some functionalities such as explore shows & order tickets will require have higher load, but because the majority of the logics will be handled by the core services, this service should have smaller load.
+
+The real time notification can be handled by WebSocket or Server-Sent Events (SSE). It will be explored further in the next ADR.
 
 ### Database
 
@@ -142,8 +136,7 @@ The gRPC can be considered in the future if I need better performance and strong
 
 ### Negative
 
-- Using single DB can lead to potential bottleneck when the system scale. Also, schema change need to be coordinated between services.
+- Using single DB can lead to potential bottleneck when the system scale. Also, schema change need to be coordinated between services. 
 - Synchronous HTTP communication can lead to cascading failure when one service is down. Each service need to implement proper circuit breaker and fallback mechanism.
 - Using API Gateway can lead to single point of failure if not implemented properly.
-- API Gateway can add extra latency for each request.
 - More operational overhead because of many services that need to be monitored, deployed, and managed.

@@ -1,0 +1,45 @@
+vars: {
+  d2-config: {
+    layout-engine: elk
+  }
+}
+
+gateway: {
+  label: API Gateway
+  shape: hexagon
+}
+customService: Custom Web Service
+resellerService: Reseller Service
+coreOrderTicketService: Core Order Ticket Service
+coreExploreTicketService: Core Explore Ticket Service
+db: {
+  label: Database
+  shape: cylinder
+}
+redis: {
+  label: Redis
+  shape: cylinder
+}
+sseLoadBalancer: SSE Load Balancer
+sseService: SSE Service
+
+gateway -> customService: "Explore shows, order tickets, & get web config\n[HTTPS]"
+resellerService -> customService: {
+  label: "Publish web config updates\n[Kafka]"
+  style.stroke-dash: 3
+}
+gateway -> sseLoadBalancer: "Establish SSE Connections\n[HTTPS]"
+sseLoadBalancer -> sseService: "Distribute SSE Connections\n[HTTPS]"
+customService -> sseService: {
+  label: "Publish notification\n[Kafka]"
+  style.stroke-dash: 3
+}
+
+customService -> db: "Read/Write data\n[PG Protocol]"
+customService -> redis: "Read/Write cached data\n[Redis Protocol]"
+coreExploreTicketService <- customService: "Explore shows & tickets\n[HTTPS]"
+customService -> coreOrderTicketService: "Order ticket X\n[HTTPS]"
+coreOrderTicketService -> customService: {
+  label: "Publish ticket X bought\n[Kafka]"
+  style.stroke-dash: 3
+}

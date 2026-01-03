@@ -118,8 +118,7 @@ Note:
 - X Scaling core explore ticket service
 - X Scaling notification service
 - Scaling custom web service (include scale the SSE part)
-- Scaling custom web order service
-- Scaling admin & ticket management service
+- Scaling admin & reseller service
 
 
 ## Reference

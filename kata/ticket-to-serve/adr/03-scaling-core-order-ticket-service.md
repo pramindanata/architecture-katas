@@ -84,9 +84,9 @@ Considered alternatives:
 
 ### Syncing Stock Data
 
-The ticket management service's DB will the source of truth of the ticket stock data. To sync the stock data to the core order ticket service, I can use an asynchronous approach (event-driven) where the ticket management service will publish an event to Kafka whenever there is a change in the ticket stock data. The core order ticket service will have a consumer that listens to those events and update its own DB accordingly. Also, the core order ticket service need to inform the ticket management service about the stock change after processing the order.
+The reseller service's DB will the source of truth of the ticket stock data. To sync the stock data to the core order ticket service, I can use an asynchronous approach (event-driven) where the reseller service will publish an event to Kafka whenever there is a change in the ticket stock data. The core order ticket service will have a consumer that listens to those events and update its own DB accordingly. Also, the core order ticket service need to inform the reseller service about the stock change after processing the order.
 
-The sync communication can also be an alternative (such as HTTP request), but system need to handle retry the request in case of failure. Also, this approach will add more load to the ticket management service.
+The sync communication can also be an alternative (such as HTTP request), but system need to handle retry the request in case of failure. Also, this approach will add more load to the reseller service.
 
 ### Sending Notification
 
@@ -100,13 +100,13 @@ Any notification for the user will be handled by the notification service via as
 
 ### Positive
 
-- The architecture can handle massive traffic spikes during high-demand events.
+- Allow high availability and elasticity during traffic spike.
 - Data consistency is ensured during the ticket purchase process.
 - The use of dedicated services and databases allows for better isolation of load and easier scaling.
 - The use of third-party payment providers reduces the complexity of the system and allows focusing on the core domain.
 
 ### Negative
 
-- The architecture is more complex and requires more infrastructure to maintain (e.g., Kafka, Redis Cluster, PostgreSQL with Citus).
+- The architecture is becoming more complex and requires more infrastructure to maintain (e.g., Kafka, Redis Cluster, PostgreSQL with Citus).
 - Higher learning curve for the development team due to the use of multiple technologies.
-- Increased resource consumption due to the use of multiple services and databases.
+- Increased infrastructure cost.

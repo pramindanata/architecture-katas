@@ -41,11 +41,10 @@ admin -> adminDashboard
 
 coreOrderTicketService: Core Order Ticket Service
 coreExploreTicketService: Core Explore Ticket Service
-ticketManagementService: Ticket Management Service
+resellerService: Reseller Service
 adminService: Admin Service
 notificationService: Notification Service
 customWebService: Custom Web Service
-customWebOrderService: Custom Web Order Service
 
 database: {
   label: Database
@@ -58,17 +57,17 @@ adminDashboard -> gateway: Manage platform
 resellerSystem -> gateway: Integrate with ticketing platform
 gateway -> coreOrderTicketService
 gateway -> coreExploreTicketService
-gateway -> ticketManagementService
+gateway -> resellerService
 gateway -> adminService
 gateway -> customWebService
-gateway -> customWebOrderService
 coreExploreTicketService -> database
 customWebService -> database
-customWebOrderService -> database 
+customWebService -> coreExploreTicketService
+customWebService -> coreOrderTicketService
 adminService -> database
 coreOrderTicketService -> database
-ticketManagementService -> database
+resellerService -> database
 adminService -> notificationService
 coreOrderTicketService -> notificationService
-ticketManagementService -> notificationService 
+resellerService -> notificationService 
 notificationService -> resellerSystem

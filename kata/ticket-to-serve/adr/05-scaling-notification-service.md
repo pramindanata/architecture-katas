@@ -28,13 +28,13 @@ Considered alternatives are SendGrid & Mailgun. Both are popular email service w
 
 Other services that need to send email notification will publish an event to the existing **Apache Kafka** instance. The notification service will have a consumer that listens to those events and generate & send the email notification accordingly.
 
-With how Kafka works, the load can be distributed to multiple notification service instances.
+With how Kafka works, the load can be distributed to the available notification service instances.
 
 ### Protocol for Webhook Notification
 
-For webhook notification to reseller system, I will use **HTTP** protocol with JSON payload. This approach is widely adopted and easy to implement. The payload will contain relevant information about the event, such as ticket sold out or fraud detected.
+For the webhook notification to reseller system, I will use **HTTP** protocol with JSON payload. This approach is widely adopted and easy to implement. The payload will contain relevant information about the event, such as ticket sold out or fraud detected.
 
-The gRPC is considered as an alternative. It offers better performance and efficiency compared to HTTP/JSON, especially for high-throughput scenarios. However, it requires more complex setup, complex debugging, and may not be supported by all reseller systems.
+GRPC is considered as an alternative. It offers better performance and efficiency compared to HTTP/JSON, especially for high-throughput scenarios. However, it requires more complex to set up, debug, and may not be supported by all reseller systems.
 
 ### Result
 
@@ -44,13 +44,13 @@ The gRPC is considered as an alternative. It offers better performance and effic
 
 ### Positive
 
-- The notification service can scale efficiently during high traffic periods.
+- Allow the service to scale efficiently during high traffic.
 - Using Amazon SES reduces the complexity of email sending and allows focusing on core functionalities.
 - The use of Kafka as a queue helps to distribute the load and ensures reliable delivery of notifications.
 - HTTP/JSON webhook notification is easy to implement and widely supported.
 
 ### Negative
 
-- Generating email content on the server side requires more resources during high traffic.
+- Generating email content on the server side requires more resources.
 - Relying on third-party email provider may introduce dependency and potential latency.
 - HTTP/JSON webhook notification may have higher overhead compared to gRPC.
