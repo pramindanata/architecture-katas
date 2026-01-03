@@ -79,7 +79,9 @@ This service will handle some functionalities for reseller custom web. Responsib
 - User can explore available shows & tickets details.
 - User can receive real time notification when the ticket they are looking at just got purchased.
 
-Some functionalities such as explore shows will require have higher load because the majority of the logics will be handled by the core explore ticket service, this service should have smaller load.
+Some functionalities such as explore shows will require have higher load, but because the majority of the logics will be handled by the core explore ticket service, this service should have smaller load.
+
+The real time notification can be handled by WebSocket or Server-Sent Events (SSE). It will be explored further in the next ADR.
 
 #### Custom Web Order Service
 

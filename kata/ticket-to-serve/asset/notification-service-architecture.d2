@@ -1,0 +1,16 @@
+notificationService: Notification Service
+coreOrderService: Core Order Ticket Service
+ticketManagementService: Ticket Management Service
+ses: AWS SES
+resellerSystem: Reseller System
+
+coreOrderService -> notificationService: {
+  label: "Dispatch events\n[Kafka]"
+  style.stroke-dash: 3
+}
+ticketManagementService -> notificationService: {
+  label: "Dispatch events\n[Kafka]"
+  style.stroke-dash: 3
+}
+notificationService -> ses: "Send Email Notification\n[HTTPS]"
+notificationService -> resellerSystem: "Send Webhook Notification\n[HTTPS]"

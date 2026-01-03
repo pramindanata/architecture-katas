@@ -98,7 +98,7 @@ Bonus:
 Note:
 
 - Ensuring ticket stock correctness while handling massive traffic spike when the ticket purchasing period opens is the main challenge for this system.
-- Ticket oversell need to be avoided because it will lead to potential user dissatisfaction and bad reputation to the company. Unlike airline ticketing where oversell is common, airlines can accommodate more passengers due to no-shows or cancellations.
+- Ticket overselling need to be avoided. It will lead to potential user dissatisfaction and bad reputation to the company. Unlike airline ticketing where oversell is common, airlines can accommodate more passengers due to no-shows or cancellations.
 - Interoperability seems a priority because it affects reseller adoption, but it doesn't force fundamental architecture trade-off (scaling, locking, etc.) and only requires higher discipline in API design.
 - Scalability is important, but it can be achieved by applying proper scaling technique such as sharding, partitioning, etc. which is a common solution.
 
@@ -113,19 +113,14 @@ Note:
 
 ## Design
 
-- Initial Architecture
-- Scaling core order ticket service
-- Scaling core explore ticket service
-- Scaling notification service
+- X Initial Architecture
+- X Scaling core order ticket service
+- X Scaling core explore ticket service
+- X Scaling notification service
 - Scaling custom web service (include scale the SSE part)
 - Scaling custom web order service
 - Scaling admin & ticket management service
 
-- Choosing architecture (split domain but single DB)
-- Handle ticket purchase (queue & notify)
-- Handling payment
-- Handling custom web
-- Handling SSE from ticketing to reseller system (reseller system need to send SSE request manually to the ???)
 
 ## Reference
 

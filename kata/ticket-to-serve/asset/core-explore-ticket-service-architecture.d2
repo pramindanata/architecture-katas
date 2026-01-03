@@ -1,0 +1,26 @@
+gateway: {
+  label: API Gateway
+  shape: hexagon
+}
+
+exploreService: Core Explore Ticket Service
+
+db: {
+  label: PostgreSQL DB
+  shape: cylinder
+}
+
+redis: {
+  label: Redis
+  shape: cylinder
+}
+
+ticketManagementService: Ticket Management Service
+
+gateway -> exploreService: "Explore tickets & shows\n[HTTPS]"
+exploreService -> db: "Read & write show & ticket data\n[PG Protocol]"
+exploreService -> redis: "Read & write show & ticket data cache\n[Redis Protocol]"
+ticketManagementService -> exploreService: {
+  label: "Dispatch show & ticket data update event\n[Kafka]"
+  style.stroke-dash: 3
+}
