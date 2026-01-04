@@ -8,7 +8,10 @@ gateway: {
   label: API Gateway
   shape: hexagon
 }
-customService: Custom Web Service
+customService: {
+  label: Custom Web Service
+  style.fill: "#fab1a0"
+}
 resellerService: Reseller Service
 coreOrderTicketService: Core Order Ticket Service
 coreExploreTicketService: Core Explore Ticket Service
@@ -29,14 +32,16 @@ resellerService -> customService: {
   style.stroke-dash: 3
 }
 gateway -> sseLoadBalancer: "Establish SSE Connections\n[HTTPS]"
+sseLoadBalancer -> redis: "Read/write user SSE connection data\n[Redis Protocol]"
 sseLoadBalancer -> sseService: "Distribute SSE Connections\n[HTTPS]"
 customService -> sseService: {
   label: "Publish notification\n[Kafka]"
   style.stroke-dash: 3
 }
 
-customService -> db: "Read/Write data\n[PG Protocol]"
-customService -> redis: "Read/Write cached data\n[Redis Protocol]"
+
+customService -> redis: "Read/write cached data\n[Redis Protocol]"
+customService -> db: "Read/write data\n[PG Protocol]"
 coreExploreTicketService <- customService: "Explore shows & tickets\n[HTTPS]"
 customService -> coreOrderTicketService: "Order ticket X\n[HTTPS]"
 coreOrderTicketService -> customService: {
