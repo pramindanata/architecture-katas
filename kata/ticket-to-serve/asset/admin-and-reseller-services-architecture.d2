@@ -1,0 +1,36 @@
+vars: {
+  d2-config: {
+    layout-engine: elk
+  }
+}
+
+gateway: {
+  label: API Gateway
+  shape: hexagon
+}
+
+resellerService: {
+  label: Reseller Service
+  style.fill: "#fab1a0"
+}
+
+adminService: {
+  label: Admin Service
+  style.fill: "#fab1a0"
+}
+
+db: {
+  label: PostgreSQL
+  shape: cylinder
+}
+
+coreOrderTicketService: Core Order Ticket Service
+
+gateway -> resellerService: "Manage tickets\n[HTTPS]"
+gateway -> adminService: "Manage platform\n[HTTPS]"
+resellerService -> db: "Read/write data\n[PG Protocol]"
+adminService -> db: "Read/write data\n[PG Protocol]"
+coreOrderTicketService -> resellerService: {
+  label: "Dispatch events\n[Kafka]"
+  style.stroke-dash: 3
+}

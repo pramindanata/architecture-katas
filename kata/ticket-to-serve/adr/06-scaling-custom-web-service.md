@@ -10,23 +10,31 @@ Accepted
 
 The custom web service is responsible to handle explore shows & order tickets for users who access the reseller custom web. This service technically only need to call the existing core services' APIs. However, since each reseller can have thousands to millions of users, with high traffic, these services need to be designed to scale properly.
 
-With a requirement where user need to be notified in real time when the ticket they are looking at just got bought, I need to design this service to handle notification load well. Worst case scenario, there will be thousands to millions of users looking at the same ticket.
+With a requirement where user need to be notified in real time when the ticket they are looking at just got bought, I also need to design how this service handles notification load. Worst case scenario, there will be thousands to millions of users looking at the same ticket.
 
 ## Decision
 
+### Scaling the Service
+
+Because this service will only act as a proxy to call the core services' APIs and has minimum logic, it can be scaled horizontally.
+
+In the future, if SLA requirements are strict, drastically different traffic patterns (for explore and order tickets), or other factors arise, I may need to split this service into different services for better scaling.  
+
 ### Database
 
-This service will use a dedicated **PostgreSQL** database to handle reseller custom web data such as user account, session, and web configuration. This database need to be scaled properly to handle high traffic. The traffic is expected to be lower than the core services because the majority of the logics will be handled by those services.
+This service will use a dedicated **PostgreSQL** database to handle reseller custom web data such as user account, session, and web configuration. The traffic is expected to be lower than the core services because the majority of the logics will be handled by those services.
 
 ### In-Memory Store
 
-Some data access like user session better the read from an in-memory store for lower latency. This service will use **Redis** as the in-memory store to handle such data. This store need to be scaled properly to handle high traffic.
+Some data access like user session better the read from an in-memory store for lower latency. This service will use **Redis** as the in-memory store to handle such data. 
 
 ### Sending the Real Time Notification
 
-To send real time notification to users, I choose to use **SSE** (Server-Sent Events) over WebSocket because the communication is one way only from server to client. Also, it consumes less resources that WebSocket because it only needs to maintain a one-way HTTP connection to push updates from server to client.
+To send real time notification to users, I choose to use **SSE** (Server-Sent Events) over WebSocket because the communication is one way only from server to client. Also, it consumes less resources than WebSocket.
 
-### Scaling the Real Time Notification
+With the number of users that will establish SSE connection can be very high, I need to design how to scale the SSE properly.
+
+### Scaling the SSE
 
 To handle high traffic for real time notification, I will use the following strategies:
 
@@ -35,6 +43,8 @@ To handle high traffic for real time notification, I will use the following stra
 - System will store information such as which SSE service a client is connected to in a Redis.
 - When the custom web service needs to send notification to a user, it will first check in Redis to find out which SSE services the user is connected to, then send a message the Kafka instance with the notification details and the target SSE service.
 - Each SSE service will subscribe to the Kafka topic and filter the messages that are intended for itself. Then it will push the notification to the connected clients.
+
+In the future, the SSE services can be modified to handle other new SSE notifications if needed.
 
 ![diagram](../asset/scaling-sse.png)
 
@@ -54,6 +64,7 @@ The reseller service will be the source of truth for the custom web configuratio
 
 - The custom web service can scale properly to handle high traffic.
 - The real time notification can be sent to users efficiently with low latency.
+- Simplify development because both explore shows and order tickets functionalities are handled by the same service.
 
 ### Negative
 

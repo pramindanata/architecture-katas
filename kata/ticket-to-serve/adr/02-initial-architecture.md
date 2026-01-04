@@ -62,7 +62,7 @@ This service will handle admin operations. Responsibilities:
 - Admin can process support tickets such as force refund, complain, etc.
 - Admin can mark shows that potentially will have high traffic when the ticket purchasing period opens.
 
-I think this service can be merged into Reseller Service if the operational load is small.
+I think this service can be merged into Reseller Service if the operational load is small, but I prefer to keep it separated for better clarity of the bounded context.
 
 #### Notification Service
 
