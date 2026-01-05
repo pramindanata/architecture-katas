@@ -76,6 +76,7 @@ Bonus:
 
 - Admin can process support tickets such as force refund, complain, etc.
 - Admin can mark shows that potentially will have high traffic when the ticket purchasing period opens.
+- Admin can manage resellers.
 
 ### Non-Functional Requirements
 
@@ -102,24 +103,64 @@ Note:
 - Interoperability seems a priority because it affects reseller adoption, but it doesn't force fundamental architecture trade-off (scaling, locking, etc.) and only requires higher discipline in API design.
 - Scalability is important, but it can be achieved by applying proper scaling technique such as sharding, partitioning, etc. which is a common solution.
 
-## Spikes
-
-- X Ticket purchase idempotency.
-- X Ticket inventory consistency.
-- X Purchase ticket flow
-- X Send ticket sold out notification in real time from ticketing to reseller system.
-- X Auth mechanism
-- X Create custom web per reseller with their own theme & config (how?)
-
 ## Design
 
-- X Initial Architecture
-- X Scaling core order ticket service
-- X Scaling core explore ticket service
-- X Scaling notification service
-- X Scaling custom web service (include scale the SSE part)
-- Scaling admin & reseller service
+### Spikes
 
+- [Create Custom Web for Reseller](spike/create-custom-web-for-reseller.md)
+- [Ensuring Ticket Inventory Consistency](spike/ensuring-ticket-inventory-consistency.md)
+- [Ensuring Ticket Purchase Idempotency](spike/ensuring-ticket-purchase-idempotency.md)
+- [Notifying Reseller Web When Ticket Sold Out](spike/notifying-reseller-web-when-ticket-just-got-bought.md)
+- [Purchase Ticket Flow](spike/purchase-ticket-flow.md)
+- [Ticketing Platform Auth](spike/ticketing-platform-auth.md)
+
+### ADR
+
+- [ADR01 - Choosing Architecture Style](adr/01-choosing-architecture-style.md)
+- [ADR02 - Initial Architecture](adr/02-initial-architecture.md)
+- [ADR03 - Scaling Core Order Ticket Service](adr/03-scaling-core-order-ticket-service.md)
+- [ADR04 - Scaling Core Explore Ticket Service](adr/04-scaling-core-explore-ticket-service.md)
+- [ADR05 - Scaling Notification Service](adr/05-scaling-notification-service.md)
+- [ADR06 - Scaling Custom Web Service](adr/06-scaling-custom-web-service.md)
+- [ADR07 - Scaling Admin & Reseller Services](adr/07-scaling-admin-and-reseller-services.md)
+
+### C4 Diagram
+
+#### Context
+
+![C4 Context Diagram](asset/c4-context.svg)
+
+#### Container - Software System
+
+![C4 Container Diagram - Software System](asset/c4-container-software-system.svg)
+
+#### Container - Admin Service
+
+![C4 Container Diagram - Admin Service](asset/c4-container-admin-service.svg)
+
+#### Container - Reseller Service
+
+![C4 Container Diagram - Reseller Service](asset/c4-container-reseller-service.svg)
+
+#### Container - Core Explore Ticket Service
+
+![C4 Container Diagram - Core Explore Ticket Service](asset/c4-container-core-explore-ticket-service.svg)
+
+#### Container - Core Order Ticket Service
+
+![C4 Container Diagram - Core Order Ticket Service](asset/c4-container-core-order-ticket-service.svg)
+
+#### Container - Custom Web Service
+
+![C4 Container Diagram - Custom Web Service](asset/c4-container-custom-web-service.svg)
+
+#### Container - Notification Service
+
+![C4 Container Diagram - Notification Service](asset/c4-container-notification-service.svg)
+
+## Others
+
+- [Load Test Some DB Queries](./rnd/load-test/readme.md)
 
 ## Reference
 

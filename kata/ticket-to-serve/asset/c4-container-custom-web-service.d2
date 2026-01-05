@@ -1,0 +1,132 @@
+vars: {
+  d2-config: {
+    layout-engine: elk
+  }
+}
+
+softwareSystem: |md
+  ## Ticketing Software System
+  [Software System]
+
+  Allow users to manage and order ticket shows.
+| {
+  shape: rectangle
+  style.fill: "#87CEEB"
+}
+
+coreOrderTicketService: |md
+  ## Core Order Ticket Service
+  [Software System]
+  
+  Provide order tickets functionalities.
+| {
+  shape: rectangle
+  style.fill: "#87CEEB"
+}
+
+coreExploreTicketService: |md
+  ## Core Explore Ticket Service
+  [Software System]
+  
+  Provide explore tickets functionalities.
+| {
+  shape: rectangle
+  style.fill: "#87CEEB"
+}
+
+system: |md
+  ## Custom Web Service
+  [Software System]
+  
+  Provide explore & order tickets functionalities for custom web.
+| {
+  shape: rectangle
+  style.fill: "#87CEEB"
+  label.near: bottom-left
+}
+
+resellerService: |md
+  ## Reseller Service
+  [Software System]
+  
+  Provide ticket management functionalities.
+| {
+  shape: rectangle
+  style.fill: "#87CEEB"
+}
+
+system.service: |md
+  ## Service API
+  [Container: HTTP Service]
+  
+  Provide explore & order tickets functionalities for custom web.
+| {
+  shape: rectangle
+}
+
+system.db: |md
+  ## Database
+  [Container: PostgreSQL]
+
+  Store user & custom web data.
+| {
+  shape: cylinder
+}
+
+system.memory: |md
+  ## In-Memory Store
+  [Container: Redis]
+
+  Cache session & custom web data.
+| {
+  shape: cylinder
+}
+
+system.sseLoadBalancer: |md
+  ## SSE Load Balancer
+  [Container: HTTP Service]
+
+  Distribute SSE connections.
+| {
+  shape: rectangle
+}
+
+system.sseService: |md
+  ## SSE Service
+  [Container: HTTP Service]
+
+  Provide SSE functionalities.
+| {
+  shape: rectangle
+}
+
+notificationService: |md
+  ## Notification Service
+  [Software System]
+  
+  Provide notification functionalities.
+| {
+  shape: rectangle
+  style.fill: "#87CEEB"
+}
+
+softwareSystem -> system.service: "Explore and order tickets\n[HTTPS]"
+system.service -> system.db: "Read from and write to\n[PG Protocol]"
+system.service -> system.memory: "Read from and write to\n[Redis Protocol]"
+softwareSystem -> system.sseLoadBalancer: "Establish SSE connection\n[HTTPS]"
+system.service -> notificationService: {
+  label: "Send user registered events\n[Kafka Protocol]"
+  style.stroke-dash: 3
+}
+system.sseLoadBalancer -> system.sseService: "Distribute SSE connection\n[HTTPS]"
+system.service -> system.sseService: {
+  label: "Send ticket bought events\n[Kafka Protocol]"
+  style.stroke-dash: 3
+}
+
+system.service -> coreExploreTicketService: "Explore tickets using\n[gRPC]"
+system.service -> coreOrderTicketService: "Order tickets using\n[gRPC]"
+resellerService -> system.service: {
+  label: "Send custom web changes events\n[Kafka Protocol]"
+  style.stroke-dash: 3
+}

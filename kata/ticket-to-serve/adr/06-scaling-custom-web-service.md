@@ -54,6 +54,10 @@ The Kafka topic can be optimized further by using partitioning based on the SSE 
 
 The reseller service will be the source of truth for the custom web configuration data. The reseller service need to communicate with this service through the Kafka topic to sync the web configuration data whenever there is an update.
 
+### Communicate with Core Services
+
+This service will communicate with the core services using **gRPC** for better performance but tooling and debugging will be harder than using HTTP request.
+
 ### Result
 
 ![diagram](../asset/custom-web-service-architecture.svg)
@@ -65,11 +69,13 @@ The reseller service will be the source of truth for the custom web configuratio
 - The custom web service can scale properly to handle high traffic.
 - The real time notification can be sent to users efficiently with low latency.
 - Simplify development because both explore shows and order tickets functionalities are handled by the same service.
+- Using gRPC for communicate with core services will improve performance.
 
 ### Negative
 
 - More complex infrastructure to maintain.
 - Adding the SSE load balancer and service will increase the development time.
+- GRPC has a steeper learning curve, worse tooling, and debugging experience than HTTP request.
 
 ## References
 

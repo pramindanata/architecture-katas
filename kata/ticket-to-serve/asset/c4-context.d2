@@ -1,0 +1,132 @@
+admin: |md
+  ## Admin
+  [Person]
+| {
+  shape: c4-person
+}
+
+reseller: |md
+  ## Reseller
+  [Person]
+| {
+  shape: c4-person
+}
+
+user: |md
+  ## User
+  [Person]
+| {
+  shape: c4-person
+}
+
+softwareSystem: |md
+  ## Ticketing Software System
+  [Software System]
+
+  Allow users to manage and order ticket shows.
+| {
+  shape: rectangle
+  style.fill: "#87CEEB"
+}
+
+coreOrderTicketService: |md
+  ## Core Order Ticket Service
+  [Software System]
+  
+  Provide order tickets functionalities.
+| {
+  shape: rectangle
+  style.fill: "#87CEEB"
+}
+
+coreExploreTicketService: |md
+  ## Core Explore Ticket Service
+  [Software System]
+  
+  Provide explore tickets functionalities.
+| {
+  shape: rectangle
+  style.fill: "#87CEEB"
+}
+
+notificationService: |md
+  ## Notification Service
+  [Software System]
+  
+  Provide notification functionalities.
+| {
+  shape: rectangle
+  style.fill: "#87CEEB"
+}
+
+customWebService: |md
+  ## Custom Web Service
+  [Software System]
+  
+  Provide explore & order tickets functionalities for custom web.
+| {
+  shape: rectangle
+  style.fill: "#87CEEB"
+}
+
+adminService: |md
+  ## Admin Service
+  [Software System]
+  
+  Provide platform management functionalities.
+| {
+  shape: rectangle
+  style.fill: "#87CEEB"
+}
+
+resellerService: |md
+  ## Reseller Service
+  [Software System]
+  
+  Provide ticket management functionalities.
+| {
+  shape: rectangle
+  style.fill: "#87CEEB"
+}
+
+payment: |md
+  ## Payment Provider X
+  [Software System]
+
+  External system that provide payment functionalities.
+| {
+  shape: rectangle 
+}
+
+ses: |md
+  ## Amazon SES
+  [Software System]
+  
+  External system that provide email sending functionalities.
+| {
+  shape: rectangle 
+}
+
+resellerSystem: |md
+  ## Reseller System
+  [Software System]
+  
+  Reseller system that integrate with ticketing system.
+| {
+  shape: rectangle 
+}
+
+user -> softwareSystem: Explore and order tickets using
+admin -> softwareSystem: Manage platform using
+reseller -> softwareSystem: Manage events and tickets using
+resellerSystem -> softwareSystem: "Integrate with"
+softwareSystem -> resellerService: "Manage tickets using"
+softwareSystem -> adminService: "Manage platform using"
+softwareSystem -> customWebService: "Explore & order tickets for custom web using"
+coreOrderTicketService -> payment: "Create & handle payments using"
+customWebService -> coreExploreTicketService: "Explore shows & tickets using"
+softwareSystem -> coreExploreTicketService: "Explore tickets using"
+softwareSystem -> coreOrderTicketService: "Order tickets using"
+customWebService -> coreOrderTicketService: "Create ticket orders using"
+notificationService -> ses: "Send emails using"
+notificationService -> resellerSystem: "Send webhook notifications to"

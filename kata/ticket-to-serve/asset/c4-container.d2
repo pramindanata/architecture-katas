@@ -1,0 +1,264 @@
+vars: {
+  d2-config: {
+    layout-engine: elk
+  }
+}
+
+admin: |md
+  ## Admin
+  [Person]
+| {
+  shape: c4-person
+}
+
+reseller: |md
+  ## Reseller
+  [Person]
+| {
+  shape: c4-person
+}
+
+user: |md
+  ## User
+  [Person]
+| {
+  shape: c4-person
+}
+
+system.resellerDashboard: |md
+  ## Reseller Dashboard Web
+  [Container: Web Application]
+
+  Web application for resellers to manage tickets.
+| {
+  shape: rectangle
+}
+
+system.resellerCustomWeb: |md
+  ## Reseller Custom Web
+  [Container: Web Application]
+
+  Custom web application for users to explore and order tickets.
+| {
+  shape: rectangle
+}
+
+system.adminDashboard: |md
+  ## Admin Dashboard Web
+  [Container: Web Application]
+
+  Web application for admins to manage the ticketing platform.
+| {
+  shape: rectangle
+}
+
+system.gateway: |md
+  ## API Gateway
+  [Container: Kong Gateway]
+
+  Provide clients to communicate with backend services.
+| {
+    shape: rectangle
+}
+
+system.adminService: |md
+  ## Admin Service
+  [Container: HTTP Service]
+
+  Provide management for the ticketing platform.
+| {
+  shape: rectangle
+}
+
+system.resellerService: |md
+  ## Reseller Service
+  [Container: HTTP Service]
+
+  Provide functionalities for resellers to manage tickets.
+| {
+  shape: rectangle
+}
+
+system.mainDb: |md
+  ## Main DB
+  [Container: PostgreSQL]
+
+  Store reseller, show, ticket, order, and admin data.
+| {
+  shape: cylinder
+}
+
+system.customWebService: |md
+  ## Custom Web Service
+  [Container: HTTP Service]
+
+  Provide functionalities for users to explore shows and order tickets.
+| {
+  shape: rectangle
+} 
+
+system.customWebDb: |md
+  ## Custom Web DB
+  [Container: PostgreSQL]
+
+  Store web config & user data.
+| {
+  shape: cylinder
+} 
+
+system.customWebCache: |md
+  ## Custom Web Cache
+  [Container: Redis]
+
+  Store web config & user data.
+| {
+  shape: cylinder
+} 
+
+system.coreExploreTicketService: |md
+  ## Core Explore Ticket Service
+  [Container: HTTP Service]
+
+  Provide ticket exploration functionalities.
+| {
+  shape: rectangle
+}
+
+system.coreExploreTicketDb: |md
+  ## Core Explore Ticket DB
+  [Container: PostgreSQL]
+
+  Store show & ticket data.
+| {
+  shape: cylinder
+} 
+
+system.coreExploreTicketCache: |md
+  ## Core Explore Ticket Cache
+  [Container: Redis]
+
+  Store show & ticket data.
+| {
+  shape: cylinder
+} 
+
+system.coreOrderTicketService: |md
+  ## Core Order Ticket Service
+  [Container: HTTP Service]
+
+  Provide ticket ordering functionalities.
+| {
+  shape: rectangle
+}
+
+system.coreOrderTicketDb: |md
+  ## Core Order Ticket DB
+  [Container: PostgreSQL]
+
+  Store ticket stock & order data.
+| {
+  shape: cylinder
+} 
+
+system.coreOrderTicketCache: |md
+  ## Core Order Ticket Cache
+  [Container: Redis]
+
+  Store ticket stock shard data.
+| {
+  shape: cylinder
+} 
+
+
+system.notificationService: |md
+  ## Notification Service
+  [Container: HTTP Service]
+
+  Provide notification functionalities such as email sending and webhook notifications.
+| {
+  shape: rectangle
+}
+
+system: |md
+  ## Ticketing System
+  [Software System]
+
+  System for users to explore and order tickets for events.
+| {
+  shape: rectangle
+  style.fill: "#87CEEB"
+  label.near: bottom-left
+}
+
+payment: |md
+  ## Payment Provider
+  [Software System]
+
+  External system that provide payment functionalities.
+| {
+  shape: rectangle 
+}
+
+ses: |md
+  ## Amazon SES
+  [Software System]
+  
+  External system that provide email sending functionalities.
+| {
+  shape: rectangle 
+}
+
+resellerSystem: |md
+  ## Reseller System
+  [Software System]
+  
+  Reseller system that integrate with ticketing system.
+| {
+  shape: rectangle 
+}
+
+user -> system.resellerCustomWeb: Explore and order tickets for events using
+admin -> system.adminDashboard: Manage platform using
+reseller -> system.resellerDashboard: Manage tickets using
+system.resellerCustomWeb -> system.gateway: "[HTTPS]"
+system.adminDashboard -> system.gateway: "[HTTPS]"
+system.resellerDashboard -> system.gateway: "[HTTPS]"
+system.gateway -> system.adminService: "[HTTPS]"
+system.gateway -> system.resellerService: "[HTTPS]"
+system.gateway -> system.customWebService: "[HTTPS]"
+system.gateway -> system.coreExploreTicketService: "[HTTPS]"
+system.gateway -> system.coreOrderTicketService: "[HTTPS]"
+system.customWebService -> system.coreExploreTicketService: "Explore shows & tickets\n[gRPC]"
+system.customWebService -> system.coreOrderTicketService: "Create ticket orders\n[gRPC]"
+
+system.adminService -> system.notificationService: {
+  label: "Send events\n[Kafka]"
+  style.stroke-dash: 3
+}
+
+system.resellerService -> system.notificationService: {
+  label: "Send events\n[Kafka]"
+  style.stroke-dash: 3
+}
+
+system.coreOrderTicketService -> system.notificationService: {
+  label: "Send events\n[Kafka]"
+  style.stroke-dash: 3
+}
+
+system.notificationService -> ses: "Send emails using\n[HTTPS]"
+resellerSystem <- system.notificationService: "Send webhook notifications using\n[HTTPS]"
+resellerSystem -> system.gateway: "Integrate with ticketing system using\n[HTTPS]"
+system.coreOrderTicketService -> payment: "Create & handle payments using\n[HTTPS]"
+
+system.resellerService -> system.mainDb: "Read/write data\n[PG Protocol]"
+system.adminService -> system.mainDb: "Read/write data\n[PG Protocol]"
+
+system.customWebService -> system.customWebDb: "Read/write data\n[PG Protocol]"
+system.customWebService -> system.customWebCache: "Read/write data\n[Redis Protocol]"
+
+system.coreExploreTicketDb <- system.coreExploreTicketService: "Read/write data\n[PG Protocol]"
+system.coreExploreTicketCache <- system.coreExploreTicketService: "Read/write data\n[Redis Protocol]"
+
+system.coreOrderTicketDb <- system.coreOrderTicketService: "Read/write data\n[PG Protocol]"
+system.coreOrderTicketCache <- system.coreOrderTicketService: "Read/write data\n[Redis Protocol]"

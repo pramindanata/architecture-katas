@@ -19,7 +19,12 @@ adminService: {
   style.fill: "#fab1a0"
 }
 
-db: {
+dbAdmin: {
+  label: PostgreSQL
+  shape: cylinder
+}
+
+dbReseller: {
   label: PostgreSQL
   shape: cylinder
 }
@@ -28,8 +33,12 @@ coreOrderTicketService: Core Order Ticket Service
 
 gateway -> resellerService: "Manage tickets\n[HTTPS]"
 gateway -> adminService: "Manage platform\n[HTTPS]"
-resellerService -> db: "Read/write data\n[PG Protocol]"
-adminService -> db: "Read/write data\n[PG Protocol]"
+resellerService -> dbReseller: "Read/write data\n[PG Protocol]"
+resellerService -> adminService: {
+  label: "Dispatch events\n[Kafka]"
+  style.stroke-dash: 3
+}
+adminService -> dbAdmin: "Read/write data\n[PG Protocol]"
 coreOrderTicketService -> resellerService: {
   label: "Dispatch events\n[Kafka]"
   style.stroke-dash: 3

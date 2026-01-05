@@ -1,0 +1,76 @@
+softwareSystem: |md
+  ## Ticketing Software System
+  [Software System]
+
+  Allow users to manage and order ticket shows.
+| {
+  shape: rectangle
+  style.fill: "#87CEEB"
+}
+
+system: |md
+  ## Core Explore Ticket Service
+  [Software System]
+  
+  Provide explore tickets functionalities.
+| {
+  shape: rectangle
+  style.fill: "#87CEEB"
+  label.near: bottom-left
+}
+
+customWebService: |md
+  ## Custom Web Service
+  [Software System]
+  
+  Provide explore & order tickets functionalities for custom web.
+| {
+  shape: rectangle
+  style.fill: "#87CEEB"
+}
+
+resellerService: |md
+  ## Reseller Service
+  [Software System]
+  
+  Provide ticket management functionalities.
+| {
+  shape: rectangle
+  style.fill: "#87CEEB"
+}
+
+system.service: |md
+  ## Service API
+  [Container: HTTP Service]
+  
+  Provide explore tickets functionalities.
+| {
+  shape: rectangle
+} 
+
+system.db: |md
+  ## Database
+  [Container: PostgreSQL]
+
+  Store show & ticket data.
+| {
+  shape: cylinder
+}
+
+system.memory: |md
+  ## In-Memory Store
+  [Container: Redis]
+
+  Cache show & ticket data.
+| {
+  shape: cylinder
+}
+
+softwareSystem -> system.service: "Explore tickets\n[HTTPS]"
+system.service -> system.db: "Read from and write to\n[PG Protocol]"
+system.service -> system.memory: "Read from and write to\n[Redis Protocol]"
+customWebService -> system.service: "Explore tickets\n[gRPC]"
+resellerService -> system.service: {
+  label: "Send show & ticket changes events\n[Kafka Protocol]"
+  style.stroke-dash: 3
+}

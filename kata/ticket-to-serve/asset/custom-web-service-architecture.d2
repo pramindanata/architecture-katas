@@ -42,8 +42,8 @@ customService -> sseService: {
 
 customService -> redis: "Read/write cached data\n[Redis Protocol]"
 customService -> db: "Read/write data\n[PG Protocol]"
-coreExploreTicketService <- customService: "Explore shows & tickets\n[HTTPS]"
-customService -> coreOrderTicketService: "Order ticket X\n[HTTPS]"
+coreExploreTicketService <- customService: "Explore shows & tickets\n[gRPC]"
+customService -> coreOrderTicketService: "Order ticket X\n[gRPC]"
 coreOrderTicketService -> customService: {
   label: "Publish ticket X bought\n[Kafka]"
   style.stroke-dash: 3

@@ -1,0 +1,106 @@
+vars: {
+  d2-config: {
+    layout-engine: elk
+  }
+}
+
+softwareSystem: |md
+  ## Ticketing Software System
+  [Software System]
+
+  Allow users to manage and order ticket shows.
+| {
+  shape: rectangle
+  style.fill: "#87CEEB"
+}
+
+system: |md
+  ## Admin Service
+  [Software System]
+  
+  Provide ticket management functionalities.
+| {
+  shape: rectangle
+  style.fill: "#87CEEB"
+  label.near: bottom-left
+}
+
+notificationService: |md
+  ## Notification Service
+  [Software System]
+  
+  Provide notification functionalities.
+| {
+  shape: rectangle
+  style.fill: "#87CEEB"
+}
+
+coreOrderTicketService: |md
+  ## Core Order Ticket Service
+  [Software System]
+  
+  Provide order tickets functionalities.
+| {
+  shape: rectangle
+  style.fill: "#87CEEB"
+}
+
+system: |md
+  ## Reseller Service
+  [Software System]
+  
+  Provide ticket management functionalities.
+| {
+  shape: rectangle
+  style.fill: "#87CEEB"
+  label.near: bottom-left
+}
+
+adminService: |md
+  ## Admin Service
+  [Software System]
+  
+  Provide platform management functionalities.
+| {
+  shape: rectangle
+  style.fill: "#87CEEB"
+}
+
+system.service: |md
+  ## Service API
+  [Container: HTTP Service]
+  
+  Provide ticket management functionalities.
+| {
+  shape: rectangle
+}
+
+system.db: |md
+  ## Database
+  [Container: PostgreSQL]
+
+  Store show, ticket, order, & custom web data.
+| {
+  shape: cylinder
+}
+
+direction: right
+softwareSystem -> system.service: "Manage tickets using\n[HTTPS]"
+system.service -> system.db: "Read from and write to\n[PG Protocol]"
+system.service -> notificationService: {
+  label: "Send reseller events\n[Kafka Protocol]"
+  style.stroke-dash: 3
+}
+system.service -> adminService: {
+  label: "Send reseller events\n[Kafka Protocol]"
+  style.stroke-dash: 3
+}
+coreOrderTicketService -> system.service: {
+  label: "Send order ticket events\n[Kafka Protocol]"
+  style.stroke-dash: 3
+}
+
+coreOrderTicketService <- system.service: {
+  label: "Send ticket changes events\n[Kafka Protocol]"
+  style.stroke-dash: 3
+}

@@ -1,0 +1,111 @@
+system: |md
+  ## Notification Service
+  [Software System]
+  
+  Provide notification functionalities.
+| {
+  shape: rectangle
+  style.fill: "#87CEEB"
+  label.near: bottom-left
+}
+
+adminService: |md
+  ## Admin Service
+  [Software System]
+  
+  Provide platform management functionalities.
+| {
+  shape: rectangle
+  style.fill: "#87CEEB"
+}
+
+resellerService: |md
+  ## Reseller Service
+  [Software System]
+  
+  Provide ticket management functionalities.
+| {
+  shape: rectangle
+  style.fill: "#87CEEB"
+}
+
+coreOrderTicketService: |md
+  ## Core Order Ticket Service
+  [Software System]
+  
+  Provide order tickets functionalities.
+| {
+  shape: rectangle
+  style.fill: "#87CEEB"
+}
+
+customWebService: |md
+  ## Custom Web Service
+  [Software System]
+  
+  Provide explore & order tickets functionalities for custom web.
+| {
+  shape: rectangle
+  style.fill: "#87CEEB"
+}
+
+ses: |md
+  ## Amazon SES
+  [Software System]
+  
+  External system that provide email sending functionalities.
+| {
+  shape: rectangle 
+}
+
+resellerService: |md
+  ## Reseller Service
+  [Software System]
+  
+  Provide ticket management functionalities.
+| {
+  shape: rectangle
+  style.fill: "#87CEEB"
+}
+
+system.service: |md
+  ## Service API
+  [Container: HTTP Service]
+  
+  Provide notification functionalities.
+| {
+  shape: rectangle
+  width: 400
+}
+
+resellerSystem: |md
+  ## Reseller System
+  [Software System]
+  
+  Reseller system that integrate with ticketing system.
+| {
+  shape: rectangle 
+}
+
+adminService -> system.service: {
+  label: "Send events\n[Kafka Protocol]"
+  style.stroke-dash: 3 
+}
+
+coreOrderTicketService -> system.service: {
+  label: "Send events\n[Kafka Protocol]"
+  style.stroke-dash: 3 
+}
+
+customWebService -> system.service: {
+  label: "Send events\n[Kafka Protocol]"
+  style.stroke-dash: 3 
+}
+
+resellerService -> system.service: {
+  label: "Send events\n[Kafka Protocol]"
+  style.stroke-dash: 3 
+}
+
+system.service -> ses: "Send emails using\n[HTTPS]"
+system.service -> resellerSystem: "Send webhook notifications\n[HTTPS]"

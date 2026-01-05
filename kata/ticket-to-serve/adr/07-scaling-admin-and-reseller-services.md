@@ -16,9 +16,9 @@ With this lower requirement, I need to decide how to scale these services proper
 
 ### Database
 
-Both services can use a single relational database instance with proper database schema design. I choose **PostgreSQL** for this purpose because both services don't have massive read & write operation that need to be handled. A SQL database that guarantee ACID, relationship, and offer various extension for flexibility is enough for this use case.
+Each service will have its own dedicated database. I choose **PostgreSQL** for this purpose because both services don't have massive read & write operation that need to be handled. A SQL database that guarantee ACID, relationship, and offer various extension for flexibility is enough for this use case.
 
-Sharding & read replication may need to be applied to optimize some read operations such as reading ticket sales report & list of created orders.
+Sharding & read replication may need to be applied to optimize some read operations such as reading ticket sales report & list of created orders in the reseller service.
 
 ### In-Memory Store
 
@@ -37,11 +37,8 @@ The reseller need to read details of ticket sales report from the core order tic
 ### Positive
 
 - Both services have simple architecture that is easy to maintain.
-- Using a single relational database instance reduces infrastructure costs.
-- The architecture can still scale vertically by upgrading the database instance or optimizing the schema.
 
 ### Negative
 
-- Both services have limited scalability due to the single database instance.
-- Potential bottleneck if the number of resellers or admin operations increases significantly.
-- Future migration to a more scalable architecture may be required if traffic increases.
+- Both services may need to be optimized further if the traffic increases drastically in the future.
+- Syncing ticket order data from the core order ticket service need to be designed properly to avoid overloading the reseller service.

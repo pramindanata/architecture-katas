@@ -1,4 +1,4 @@
-# Notifying Reseller Web When Ticket Sold Out
+# Notifying Reseller Web When Ticket Just Got Bought
 
 ## Problem
 
