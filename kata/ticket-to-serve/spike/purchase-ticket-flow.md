@@ -144,6 +144,29 @@ I can split the ticket record further. If a ticket stock is 1,000,000, then I st
 
 This approach also have the same problem as the "DB - Split the Record" approach.
 
+#### Batching with Extra Table
+
+It same as solution #1 but the order need to be created first in the queue handler and processed later by a dedicated scheduler.
+
+1. In the queue handler, system will insert a "drafted" order record.
+2. A dedicated scheduler will do the following.
+  1. Lock ticket records based on the collected ticket_ids.
+  2. Fetch the current tickets stock.
+  3. Calculate the decrement value based on the fetched order records & the available stock.
+  4. Update the ticket stock.
+  5. If the stock is insufficient, the last `m` order records will be marked as "failed".
+  6. System will notify the users about the order status.
+
+There is a new problems with this approach. The number of created drafted orders can exceed the ticket stoks. Some last `m` users may receive information late if their order is invalid because of insufficient stock.
+
+The new problem can be solved by reading and decrementing the stock from in-memory store before dispatching the "order request" message to the queue. If the in-memory store crashed, system need to acquire a global lock to warm up the data from DB. Incoming request will be rejected when the lock is acquired.
+
+Hmm, this approach seems promising but the rate of processed orders in the scheduler is unknown. More thorough load test need to be done to measure the performance.
+
+If optimizing the scheduler means increasing the number of fetched orders per execution, then the memory consumption will increase too. Separating it in a dedicated service can be a solution. But if this service crashed, then no order will be processed until it is restarted.
+
+Multiple instance of scheduler where each apply `select for update skip locked` also isn't a good solution because it can cause unfairness for some users. If there are 10,000 orders and 2 schedulers, then the first scheduler can process orders from 1 to 5,000 while the second scheduler process orders from 5,001 to 10,000. If the ticket stock is only 6,000, then users from order number 3,001 to 5,000 will receive "failed" information even though there are still available stocks.
+
 ### Notifying the Client Side
 
 To notify client side after an order record is created, system can use technology like SSE or Web Socket. The details will be explored further in a dedicated ADR document.

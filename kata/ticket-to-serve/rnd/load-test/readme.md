@@ -180,6 +180,8 @@ Remember that increasing the number of connection is not always the best solutio
 
 This test focuses on decrementing a `tickets` directly. The result was with 1,000 VUs & 100,000 iterations, it got ~1600 RPS with p95 latency ~800ms.
 
+All of my CPU cores' usage jumps from ~10% to ~90% during the test, which indicates that the database is under heavy load.
+
 ```bash
          /\      Grafana   /‾‾/  
     /\  /  \     |\  __   /  /   
